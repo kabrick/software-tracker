@@ -13,7 +13,7 @@
                 <a href="https://github.com/kabrick/software-tracker/blob/main/README.md" class="nav-link" target="_blank">Documentation</a>
             </li>
             <li class="nav-item">
-                <a href="https://github.com/kabrick" class="nav-link" target="_blank">MIT License</a>
+                <a href="https://github.com/kabrick/software-tracker/blob/main/LICENSE" class="nav-link" target="_blank">MIT License</a>
             </li>
         </ul>
     </div>
