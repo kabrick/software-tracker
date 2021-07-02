@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
+
 class HomeController extends Controller
 {
     /**
@@ -19,8 +21,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
-    {
-        return view('dashboard');
+    public function index() {
+        $projects = Project::all();
+
+        return view('dashboard', compact('projects'));
     }
 }

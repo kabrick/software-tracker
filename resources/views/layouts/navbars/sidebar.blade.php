@@ -13,7 +13,13 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('theme_guide') }}">
-                        <i class="ni ni-planet text-blue"></i> {{ __('Icons') }}
+                        <i class="ni ni-planet text-blue"></i> Theme Guide
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('projects.index') }}">
+                        <i class="ni ni-planet text-blue"></i> View Projects
                     </a>
                 </li>
             </ul>
