@@ -35,5 +35,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Projects
     Route::resource('projects', 'ProjectsController');
+
+    // Project Versions
+    Route::resource('project_versions', 'ProjectVersionsController');
 });
 
