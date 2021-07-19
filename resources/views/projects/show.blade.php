@@ -9,9 +9,29 @@
                     <h3 class="mb-0">{{ $project->name }} Project Details</h3>
                 </div>
                 <div class="card-body">
-                    <h4>Description</h4>
+                    @include('flash::message')
 
-                    <p>{{ $project->description }}</p>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>Description</h4>
+
+                            <p>{{ $project->description }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/projects/{{ $project->id }}/edit" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
+
+                            <br><br>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="/projects/archive_project/{{ $project->id }}/" class="btn btn-outline-warning btn-rounded col-md-12">Archive</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="/projects/delete_project/{{ $project->id }}/" class="btn btn-outline-danger btn-rounded col-md-12">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <hr>
 

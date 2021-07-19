@@ -77,7 +77,7 @@ class ProjectsController extends Controller {
 
             $project->save();
 
-            return redirect('/projects/');
+            return redirect('/projects/' . $id);
         } else {
             flash("Project name was not entered")->error();
             return back()->withInput();
@@ -89,5 +89,47 @@ class ProjectsController extends Controller {
      */
     public function destroy($id) {
         //
+    }
+
+    public function archive_project($id) {
+        $project = Project::findOrFail($id);
+
+        if ($project->delete()) {
+            flash("Project has been archived")->success();
+            return redirect('/home/');
+        } else {
+            flash("An error occurred. Project was not archived")->error();
+            return back()->withInput();
+        }
+    }
+
+    public function delete_project($id) {
+        $project = Project::findOrFail($id);
+
+        if ($project->forceDelete()) {
+            flash("Project has been deleted")->success();
+            return redirect('/home/');
+        } else {
+            flash("An error occurred. Project was not deleted")->error();
+            return back()->withInput();
+        }
+    }
+
+    public function view_archived_projects() {
+        $projects = Project::onlyTrashed()->get();
+
+        return view('projects.view_archived_projects', compact('projects'));
+    }
+
+    public function restore_project($id) {
+        $project = Project::withTrashed()->findOrFail($id);
+
+        if($project->restore()){
+            flash("Project has been restored")->success();
+            return redirect('/projects/' . $project->id);
+        } else {
+            flash("An error occurred. Project was not restored")->error();
+            return back()->withInput();
+        }
     }
 }

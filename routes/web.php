@@ -34,9 +34,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('table-list', function () {return view('pages.tables');})->name('table');
 
     // Projects
+    Route::any('projects/archive_project/{id}', ['uses' => 'ProjectsController@archive_project']);
+    Route::any('projects/delete_project/{id}', ['uses' => 'ProjectsController@delete_project']);
+    Route::any('projects/view_archived_projects', ['as' => 'projects.view_archived_projects', 'uses' => 'ProjectsController@view_archived_projects']);
+    Route::any('projects/restore_project/{id}', ['uses' => 'ProjectsController@restore_project']);
     Route::resource('projects', 'ProjectsController');
 
     // Project Versions
+    Route::any('project_versions/archive_version/{id}', ['uses' => 'ProjectVersionsController@archive_version']);
+    Route::any('project_versions/delete_version/{id}', ['uses' => 'ProjectVersionsController@delete_version']);
+    Route::any('project_versions/view_archived_versions', ['as' => 'projects.view_archived_versions', 'uses' => 'ProjectVersionsController@view_archived_versions']);
+    Route::any('project_versions/restore_version/{id}', ['uses' => 'ProjectVersionsController@restore_version']);
     Route::resource('project_versions', 'ProjectVersionsController');
 });
 

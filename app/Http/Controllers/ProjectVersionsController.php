@@ -102,4 +102,46 @@ class ProjectVersionsController extends Controller {
     public function destroy($id) {
         //
     }
+
+    public function archive_version($id) {
+        $project_version = ProjectVersion::findOrFail($id);
+
+        if ($project_version->delete()) {
+            flash("Project version has been archived")->success();
+            return redirect('/home/');
+        } else {
+            flash("An error occurred. Project version was not archived")->error();
+            return back()->withInput();
+        }
+    }
+
+    public function delete_version($id) {
+        $project_version = ProjectVersion::findOrFail($id);
+
+        if ($project_version->forceDelete()) {
+            flash("Project version has been deleted")->success();
+            return redirect('/home/');
+        } else {
+            flash("An error occurred. Project version was not deleted")->error();
+            return back()->withInput();
+        }
+    }
+
+    public function view_archived_versions() {
+        $project_versions = ProjectVersion::onlyTrashed()->get();
+
+        return view('project_versions.view_archived_versions', compact('project_versions'));
+    }
+
+    public function restore_version($id) {
+        $project_version = ProjectVersion::withTrashed()->findOrFail($id);
+
+        if($project_version->restore()){
+            flash("Project version has been restored")->success();
+            return redirect('/project_versions/' . $project_version->id);
+        } else {
+            flash("An error occurred. Project version was not restored")->error();
+            return back()->withInput();
+        }
+    }
 }

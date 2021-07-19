@@ -9,6 +9,9 @@
                     <h3 class="mb-0">Projects</h3>
                 </div>
                 <div class="card-body">
+
+                    @include('flash::message')
+
                     <div class="row">
                         <div class="col-md-6">
                             <a class="btn-icon-clipboard" title="Create New Project" href="{{ route('projects.create') }}">
