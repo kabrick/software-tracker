@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProjectVersion;
+use App\Models\ProjectVersionGuide;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +58,9 @@ class ProjectVersionsController extends Controller {
     public function show($id) {
         $project_version = ProjectVersion::find($id);
 
-        return view('project_versions.show', compact('project_version'));
+        $guides = ProjectVersionGuide::where('version_id', $id)->get();
+
+        return view('project_versions.show', compact('project_version', 'guides'));
     }
 
     /**

@@ -43,6 +43,10 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            <br><br>
+
+                            <a href="#" class="btn btn-outline-info btn-rounded col-md-12">View Project Version Features</a>
                         </div>
                         <div class="col-md-2">
                             <a href="/project_versions/{{ $project_version->id }}/edit" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
@@ -60,6 +64,72 @@
                             <a href="/project_versions/delete_version/{{ $project_version->id }}/" class="btn btn-outline-danger btn-rounded col-md-12">Delete</a>
                         </div>
                     </div>
+
+                    <hr>
+
+                    <h4>Guides</h4>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a class="btn-icon-clipboard" title="Add New Guide" href="/project_versions/create_guide/{{ $project_version->id }}">
+                                <div>
+                                    <i class="ni ni-fat-add"></i>
+                                    <span>
+                                        <h3>Add New Guide</h3>
+                                        <p>Add a new guide to help users perform actions in your application</p>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            @if(count($guides) > 0)
+                                <a class="btn-icon-clipboard" title="{{ $guides[0]->title }}" href="/project_versions/{{ $guides[0]->id }}">
+                                    <div>
+                                        <i class="ni ni-folder-17"></i>
+                                        <span>
+                                        <h3>{{ $guides[0]->title }}</h3>
+                                        <p>{{ $guides[0]->description }}</p>
+                                    </span>
+                                    </div>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+
+                    @php $counter = 1; @endphp
+
+                    @while($counter < count($guides))
+                        <div class="row">
+                            <div class="col-md-6">
+                                @if(isset($guides[$counter]))
+                                    <a class="btn-icon-clipboard" title="{{ $guides[$counter]->title }}" href="/project_versions/{{ $guides[$counter]->id }}">
+                                        <div>
+                                            <i class="ni ni-folder-17"></i>
+                                            <span>
+                                        <h3>{{ $guides[$counter]->title }}</h3>
+                                        <p>{{ $guides[$counter]->description }}</p>
+                                    </span>
+                                        </div>
+                                    </a>
+                                @endif
+                            </div>
+                            <div class="col-md-6">
+                                @if(isset($guides[$counter + 1]))
+                                    <a class="btn-icon-clipboard" title="{{ $guides[$counter + 1]->title }}" href="/project_versions/{{ $guides[$counter + 1]->id }}">
+                                        <div>
+                                            <i class="ni ni-folder-17"></i>
+                                            <span>
+                                        <h3>{{ $guides[$counter + 1]->title }}</h3>
+                                        <p>{{ $guides[$counter + 1]->description }}</p>
+                                    </span>
+                                        </div>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+
+                        @php $counter += 2; @endphp
+                    @endwhile
                 </div>
             </div>
         </div>
