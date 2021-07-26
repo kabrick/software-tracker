@@ -35,6 +35,7 @@
                     @php $steps = $guide->steps()->get(); $counter = 1; @endphp
 
                     @foreach($steps as $step)
+                        @if($counter > 1) <hr> @endif
                         <div class='row'>
                             <div class='col-md-6'>
                                 <img src='{{ $step->images }}' width='600' height='250' alt='image' id='image_preview1'>
@@ -49,6 +50,8 @@
                         @php $counter++ @endphp
                         <br><br>
                     @endforeach
+
+                    <a href="/project_versions/edit_guide/{{ $guide->id }}" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
                 </div>
             </div>
         </div>

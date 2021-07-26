@@ -51,5 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_versions/create_guide/{id}', ['uses' => 'ProjectVersionGuideController@create_guide']);
     Route::any('project_versions/store_guide', ['as' => 'project_versions.store_guide', 'uses' => 'ProjectVersionGuideController@store_guide']);
     Route::any('project_versions/publish_guide/{id}', ['uses' => 'ProjectVersionGuideController@publish_guide']);
+    Route::any('project_versions/edit_guide/{id}', ['uses' => 'ProjectVersionGuideController@edit_guide']);
+    Route::any('project_versions/update_guide', ['as' => 'project_versions.update_guide', 'uses' => 'ProjectVersionGuideController@update_guide']);
 });
 
