@@ -59,10 +59,10 @@
                             <a href="#" class="btn btn-outline-success btn-rounded col-md-12">Clone</a>
                         </div>
                         <div class="col-md-3">
-                            <a href="/project_versions/archive_guide/{{ $guide->id }}/" class="btn btn-outline-warning btn-rounded col-md-12">Archive</a>
+                            <a href="/project_versions/archive_guide/{{ $guide->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this guide')">Archive</a>
                         </div>
                         <div class="col-md-3">
-                            <a href="/project_versions/delete_guide/{{ $guide->id }}/" class="btn btn-outline-danger btn-rounded col-md-12">Delete</a>
+                            <a href="/project_versions/delete_guide/{{ $guide->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this guide')">Delete</a>
                         </div>
                     </div>
                 </div>

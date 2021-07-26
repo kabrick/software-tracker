@@ -24,10 +24,10 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <a href="/projects/archive_project/{{ $project->id }}/" class="btn btn-outline-warning btn-rounded col-md-12">Archive</a>
+                                    <a href="/projects/archive_project/{{ $project->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this project')">Archive</a>
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="/projects/delete_project/{{ $project->id }}/" class="btn btn-outline-danger btn-rounded col-md-12">Delete</a>
+                                    <a href="/projects/delete_project/{{ $project->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this project')">Delete</a>
                                 </div>
                             </div>
                         </div>
