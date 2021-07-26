@@ -107,7 +107,7 @@ class ProjectVersionsController extends Controller {
     }
 
     public function archive_version($id) {
-        $project_version = ProjectVersion::findOrFail($id);
+        $project_version = ProjectVersion::find($id);
 
         if ($project_version->delete()) {
             flash("Project version has been archived")->success();
@@ -119,7 +119,7 @@ class ProjectVersionsController extends Controller {
     }
 
     public function delete_version($id) {
-        $project_version = ProjectVersion::findOrFail($id);
+        $project_version = ProjectVersion::find($id);
 
         if ($project_version->forceDelete()) {
             flash("Project version has been deleted")->success();
@@ -137,7 +137,7 @@ class ProjectVersionsController extends Controller {
     }
 
     public function restore_version($id) {
-        $project_version = ProjectVersion::withTrashed()->findOrFail($id);
+        $project_version = ProjectVersion::withTrashed()->find($id);
 
         if($project_version->restore()){
             flash("Project version has been restored")->success();

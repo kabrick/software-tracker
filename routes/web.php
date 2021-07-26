@@ -40,18 +40,22 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('projects/restore_project/{id}', ['uses' => 'ProjectsController@restore_project']);
     Route::resource('projects', 'ProjectsController');
 
-    // Project Versions
-    Route::any('project_versions/archive_version/{id}', ['uses' => 'ProjectVersionsController@archive_version']);
-    Route::any('project_versions/delete_version/{id}', ['uses' => 'ProjectVersionsController@delete_version']);
-    Route::any('project_versions/view_archived_versions', ['as' => 'projects.view_archived_versions', 'uses' => 'ProjectVersionsController@view_archived_versions']);
-    Route::any('project_versions/restore_version/{id}', ['uses' => 'ProjectVersionsController@restore_version']);
-    Route::resource('project_versions', 'ProjectVersionsController');
-
     // Project Version Guides
     Route::any('project_versions/create_guide/{id}', ['uses' => 'ProjectVersionGuideController@create_guide']);
     Route::any('project_versions/store_guide', ['as' => 'project_versions.store_guide', 'uses' => 'ProjectVersionGuideController@store_guide']);
     Route::any('project_versions/publish_guide/{id}', ['uses' => 'ProjectVersionGuideController@publish_guide']);
     Route::any('project_versions/edit_guide/{id}', ['uses' => 'ProjectVersionGuideController@edit_guide']);
     Route::any('project_versions/update_guide', ['as' => 'project_versions.update_guide', 'uses' => 'ProjectVersionGuideController@update_guide']);
+    Route::any('project_versions/archive_guide/{id}', ['uses' => 'ProjectVersionGuideController@archive_guide']);
+    Route::any('project_versions/delete_guide/{id}', ['uses' => 'ProjectVersionGuideController@delete_guide']);
+    Route::any('project_versions/view_archived_guides', ['as' => 'project_versions.view_archived_guides', 'uses' => 'ProjectVersionGuideController@view_archived_guides']);
+    Route::any('project_versions/restore_guide/{id}', ['uses' => 'ProjectVersionGuideController@restore_guide']);
+
+    // Project Versions
+    Route::any('project_versions/archive_version/{id}', ['uses' => 'ProjectVersionsController@archive_version']);
+    Route::any('project_versions/delete_version/{id}', ['uses' => 'ProjectVersionsController@delete_version']);
+    Route::any('project_versions/view_archived_versions', ['as' => 'projects.view_archived_versions', 'uses' => 'ProjectVersionsController@view_archived_versions']);
+    Route::any('project_versions/restore_version/{id}', ['uses' => 'ProjectVersionsController@restore_version']);
+    Route::resource('project_versions', 'ProjectVersionsController');
 });
 

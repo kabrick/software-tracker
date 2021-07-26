@@ -93,7 +93,7 @@ class ProjectVersionGuideController extends Controller {
 
         // remove the discarded steps
         foreach ($removed_steps as $removed_step) {
-            $project_version_guide_step = ProjectVersionGuidesStep::findOrFail($removed_step);
+            $project_version_guide_step = ProjectVersionGuidesStep::find($removed_step);
             $project_version_guide_step->forceDelete();
         }
 
@@ -105,5 +105,47 @@ class ProjectVersionGuideController extends Controller {
         $guide = ProjectVersionGuide::find($id);
 
         return view('project_version_guides.publish_guide', compact('guide'));
+    }
+
+    public function archive_guide($id) {
+        $guide = ProjectVersionGuide::find($id);
+
+        if ($guide->delete()) {
+            flash("Project version guide has been archived")->success();
+            return redirect('/project_versions/' . $guide->version_id);
+        } else {
+            flash("An error occurred. Project version guide was not archived")->error();
+            return back()->withInput();
+        }
+    }
+
+    public function delete_guide($id) {
+        $guide = ProjectVersionGuide::find($id);
+
+        if ($guide->forceDelete()) {
+            flash("Project version guide has been deleted")->success();
+            return redirect('/project_versions/' . $guide->version_id);
+        } else {
+            flash("An error occurred. Project version guide was not deleted")->error();
+            return back()->withInput();
+        }
+    }
+
+    public function view_archived_guides() {
+        $guides = ProjectVersionGuide::onlyTrashed()->get();
+
+        return view('project_version_guides.view_archived_guides', compact('guides'));
+    }
+
+    public function restore_guide($id) {
+        $guide = ProjectVersionGuide::withTrashed()->find($id);
+
+        if($guide->restore()){
+            flash("Project version guide has been restored")->success();
+            return redirect('project_versions/publish_guide/' . $guide->id);
+        } else {
+            flash("An error occurred. Project version guide was not restored")->error();
+            return back()->withInput();
+        }
     }
 }

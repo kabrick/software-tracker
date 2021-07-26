@@ -32,6 +32,10 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('projects.view_archived_versions') }}">Project Versions</a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('project_versions.view_archived_guides') }}">Project Version Guides</a>
+                            </li>
                         </ul>
                     </div>
                 </li>

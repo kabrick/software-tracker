@@ -92,7 +92,7 @@ class ProjectsController extends Controller {
     }
 
     public function archive_project($id) {
-        $project = Project::findOrFail($id);
+        $project = Project::find($id);
 
         if ($project->delete()) {
             flash("Project has been archived")->success();
@@ -104,7 +104,7 @@ class ProjectsController extends Controller {
     }
 
     public function delete_project($id) {
-        $project = Project::findOrFail($id);
+        $project = Project::find($id);
 
         if ($project->forceDelete()) {
             flash("Project has been deleted")->success();
@@ -122,7 +122,7 @@ class ProjectsController extends Controller {
     }
 
     public function restore_project($id) {
-        $project = Project::withTrashed()->findOrFail($id);
+        $project = Project::withTrashed()->find($id);
 
         if($project->restore()){
             flash("Project has been restored")->success();

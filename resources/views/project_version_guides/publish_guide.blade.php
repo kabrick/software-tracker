@@ -51,7 +51,20 @@
                         <br><br>
                     @endforeach
 
-                    <a href="/project_versions/edit_guide/{{ $guide->id }}" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="/project_versions/edit_guide/{{ $guide->id }}" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="btn btn-outline-success btn-rounded col-md-12">Clone</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="/project_versions/archive_guide/{{ $guide->id }}/" class="btn btn-outline-warning btn-rounded col-md-12">Archive</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="/project_versions/delete_guide/{{ $guide->id }}/" class="btn btn-outline-danger btn-rounded col-md-12">Delete</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
