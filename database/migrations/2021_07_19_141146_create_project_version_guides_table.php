@@ -16,7 +16,6 @@ class CreateProjectVersionGuidesTable extends Migration {
             $table->integer("version_id");
             $table->string("title");
             $table->text("description");
-            $table->text("image");
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
             $table->timestamps();

@@ -83,9 +83,9 @@
                         </div>
                         <div class="col-md-6">
                             @if(count($guides) > 0)
-                                <a class="btn-icon-clipboard" title="{{ $guides[0]->title }}" href="/project_versions/{{ $guides[0]->id }}">
+                                <a class="btn-icon-clipboard" title="{{ $guides[0]->title }}" href="/project_versions/publish_guide/{{ $guides[0]->id }}">
                                     <div>
-                                        <i class="ni ni-folder-17"></i>
+                                        <i class="ni ni-glasses-2"></i>
                                         <span>
                                         <h3>{{ $guides[0]->title }}</h3>
                                         <p>{{ $guides[0]->description }}</p>
@@ -102,7 +102,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 @if(isset($guides[$counter]))
-                                    <a class="btn-icon-clipboard" title="{{ $guides[$counter]->title }}" href="/project_versions/{{ $guides[$counter]->id }}">
+                                    <a class="btn-icon-clipboard" title="{{ $guides[$counter]->title }}" href="/project_versions/publish_guide/{{ $guides[$counter]->id }}">
                                         <div>
                                             <i class="ni ni-folder-17"></i>
                                             <span>
@@ -115,7 +115,7 @@
                             </div>
                             <div class="col-md-6">
                                 @if(isset($guides[$counter + 1]))
-                                    <a class="btn-icon-clipboard" title="{{ $guides[$counter + 1]->title }}" href="/project_versions/{{ $guides[$counter + 1]->id }}">
+                                    <a class="btn-icon-clipboard" title="{{ $guides[$counter + 1]->title }}" href="/project_versions/publish_guide/{{ $guides[$counter + 1]->id }}">
                                         <div>
                                             <i class="ni ni-folder-17"></i>
                                             <span>

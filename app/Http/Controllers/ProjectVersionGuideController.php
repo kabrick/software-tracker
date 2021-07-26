@@ -21,12 +21,6 @@ class ProjectVersionGuideController extends Controller {
         $guide->title = $request->title;
         $guide->description = $request->description;
 
-        // for the images
-        $image = $request->file('feature_image');
-        $image_name = Carbon::now()->timestamp . "." . $image->getClientOriginalExtension();
-        $path = $image->storeAs('uploads/guides_images', $image_name, 'public');
-
-        $guide->image = "/storage/" . $path;
         $guide->created_by = Auth::user()->id;
         $guide->save();
 
@@ -61,6 +55,8 @@ class ProjectVersionGuideController extends Controller {
     }
 
     public function publish_guide($id) {
-        //
+        $guide = ProjectVersionGuide::find($id);
+
+        return view('project_version_guides.publish_guide', compact('guide'));
     }
 }

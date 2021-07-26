@@ -37,7 +37,9 @@
 
                 @yield('content')
 
-                @include('layouts.footers.auth')
+                @auth()
+                    @include('layouts.footers.auth')
+                @endauth
             </div>
         </div>
 
