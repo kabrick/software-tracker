@@ -22,7 +22,8 @@ class ProjectVersionsController extends Controller {
      *
      */
     public function create() {
-        return view('project_versions.create');
+        $project_id = session()->get("project_id");
+        return view('project_versions.create', compact('project_id'));
     }
 
     /**

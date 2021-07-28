@@ -3,7 +3,15 @@
 @section('content')
 
     <div class="row justify-content-center">
-        <div class=" col ">
+        <div class=" col "><nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/projects/{{ get_name($guide->version_id, 'id', 'project_id', 'project_versions') }}">{{ get_name(get_name($guide->version_id, 'id', 'project_id', 'project_versions'), 'id', 'name', 'projects') }}</a></li>
+                    <li class="breadcrumb-item"><a href="/project_versions/{{ $guide->version_id }}">{{ get_name($guide->version_id, 'id', 'name', 'project_versions') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Update Project Version Guide</li>
+                </ol>
+            </nav>
+
             <div class="card">
                 <div class="card-header bg-transparent">
                     <h3 class="mb-0">Update Project Version Guide</h3>
@@ -28,8 +36,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <hr>
 
                     <div class='input_fields_wrap'>
                         @php $steps = $guide->steps()->get(); $counter = 1; @endphp

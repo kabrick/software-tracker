@@ -4,9 +4,18 @@
 
     <div class="row justify-content-center">
         <div class=" col ">
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="/projects/{{ $project_version->project_id }}">{{ get_name($project_version->project_id, 'id', 'name', 'projects') }}</a></li>
+                    <li class="breadcrumb-item"><a href="/project_versions/{{ $project_version->id }}">{{ get_name($project_version->id, 'id', 'name', 'project_versions') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Project Version</li>
+                </ol>
+            </nav>
+
             <div class="card">
                 <div class="card-header bg-transparent">
-                    <h3 class="mb-0">Create Project Version</h3>
+                    <h3 class="mb-0">Edit Project Version</h3>
                 </div>
                 <div class="card-body">
                     {{ Form::model($project_version, ['method' => 'PUT', 'route' => ['project_versions.update',$project_version], 'data-toggle' => 'validator']) }}
