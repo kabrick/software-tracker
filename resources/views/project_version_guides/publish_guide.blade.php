@@ -65,7 +65,7 @@
                             <a href="/project_versions/edit_guide/{{ $guide->id }}" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
                         </div>
                         <div class="col-md-3">
-                            <a href="#" class="btn btn-outline-success btn-rounded col-md-12">Clone</a>
+                            <a href="#" class="btn btn-outline-success btn-rounded col-md-12" onclick="clone_guide()">Clone To Another Project Version</a>
                         </div>
                         <div class="col-md-3">
                             <a href="/project_versions/archive_guide/{{ $guide->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this guide')">Archive</a>
@@ -79,8 +79,64 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+        <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modal-title-default">Clone Guide</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h4>Choose a project version to clone the guide to</h4>
+                    <hr>
+
+                    @foreach($project_versions as $project_version)
+                        <div class="custom-control custom-radio mb-3">
+                            <input type="radio" id="project_version_clone{{ $project_version->id }}" name="project_version_clone" value="{{ $project_version->id }}" class="custom-control-input project_version_clone">
+                            <label class="custom-control-label" for="project_version_clone{{ $project_version->id }}">{{ $project_version->name }}</label>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="complete_clone()">Clone</button>
+                    <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @push('js')
-    <script></script>
+    <script>
+        let guide_id = <?php echo $guide->id; ?>;
+
+        function clone_guide() {
+            if (confirm("Are you sure you want to clone this guide into another project version?")) {
+                $('#modal-default').modal('show');
+            }
+        }
+
+        function complete_clone() {
+            let val = $(".project_version_clone:checked").val();
+
+            if (val === undefined) {
+                alert("Please select a project version to clone this guide to");
+            } else {
+                $.ajax({
+                    method: 'GET',
+                    url: '/project_versions/clone_guide/' + guide_id + '/' + val,
+                    success: function(response){
+                        alert(response);
+                        $('#modal-default').modal('hide');
+                    }
+                });
+            }
+        }
+    </script>
 @endpush

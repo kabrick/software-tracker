@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProjectVersionGuideController extends Controller {
 
@@ -104,7 +105,9 @@ class ProjectVersionGuideController extends Controller {
     public function publish_guide($id) {
         $guide = ProjectVersionGuide::find($id);
 
-        return view('project_version_guides.publish_guide', compact('guide'));
+        $project_versions = DB::table('project_versions')->whereNotIn('id', [$guide->version_id])->get(['id', 'name']);
+
+        return view('project_version_guides.publish_guide', compact('guide', 'project_versions'));
     }
 
     public function archive_guide($id) {
@@ -147,5 +150,29 @@ class ProjectVersionGuideController extends Controller {
             flash("An error occurred. Project version guide was not restored")->error();
             return back()->withInput();
         }
+    }
+
+    public function clone_guide($id, $version_id) {
+        $guide = ProjectVersionGuide::find($id);
+
+        $new_guide = new ProjectVersionGuide();
+        $new_guide->version_id = $version_id;
+        $new_guide->title = $guide->title;
+        $new_guide->description = $guide->description;
+        $new_guide->created_by = Auth::user()->id;
+        $new_guide->save();
+
+        $new_guide_steps = $guide->steps()->get();
+
+        foreach ($new_guide_steps as $guide_step) {
+            $new_guide_steps = new ProjectVersionGuidesStep();
+            $new_guide_steps->guide_id = $new_guide->id;
+            $new_guide_steps->description = $guide_step->description;
+            $new_guide_steps->images = $guide_step->images;
+            $new_guide_steps->created_by = Auth::user()->id;
+            $new_guide_steps->save();
+        }
+
+        return "Guide was successfully cloned to the " . get_name($version_id, 'id', 'name', 'project_versions') . " project version";
     }
 }
