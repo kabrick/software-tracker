@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_versions/delete_version/{id}', ['uses' => 'ProjectVersionsController@delete_version']);
     Route::any('project_versions/view_archived_versions', ['as' => 'projects.view_archived_versions', 'uses' => 'ProjectVersionsController@view_archived_versions']);
     Route::any('project_versions/restore_version/{id}', ['uses' => 'ProjectVersionsController@restore_version']);
+    Route::any('project_versions/view_more_guides', ['uses' => 'ProjectVersionsController@view_more_guides']);
     Route::resource('project_versions', 'ProjectVersionsController');
 });
 

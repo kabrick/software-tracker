@@ -59,9 +59,10 @@ class ProjectVersionsController extends Controller {
     public function show($id) {
         $project_version = ProjectVersion::find($id);
 
-        $guides = ProjectVersionGuide::where('version_id', $id)->get();
+        $guides = ProjectVersionGuide::where('version_id', $id)->limit(3)->get();
+        $guides_count = ProjectVersionGuide::where('version_id', $id)->count();
 
-        return view('project_versions.show', compact('project_version', 'guides'));
+        return view('project_versions.show', compact('project_version', 'guides', 'guides_count'));
     }
 
     /**
@@ -147,5 +148,44 @@ class ProjectVersionsController extends Controller {
             flash("An error occurred. Project version was not restored")->error();
             return back()->withInput();
         }
+    }
+
+    public function view_more_guides(Request $request) {
+        $last_guide_id = $request->last_guide_id;
+        $id = $request->id;
+
+        $guides = ProjectVersionGuide::where('version_id', $id)->where('id', '>', $last_guide_id)->limit(4)->get();
+
+        $html_text = "";
+
+        $counter = 0;
+
+        while($counter < count($guides)) {
+            $html_text .= "<div class='row'>";
+            $html_text .= "<div class='col-md-6'>";
+            if (isset($guides[$counter])) {
+                $html_text .= "<a class='btn-icon-clipboard' title = '" . $guides[$counter]->title . "' href = '/project_versions/publish_guide/" . $guides[$counter]->id . "'>";
+                $html_text .= "<div><i class='ni ni-folder-17'></i><span>";
+                $html_text .= "<h3>" . $guides[$counter]->title . "</h3>";
+                $html_text .= "<p>" . $guides[$counter]->description . "</p>";
+                $html_text .= "</span></div></a>";
+            }
+            $html_text .= "</div><div class='col-md-6'>";
+            if (isset($guides[$counter + 1])) {
+                $html_text .= "<a class='btn-icon-clipboard' title = '" . $guides[$counter + 1]->title . "' href = '/project_versions/publish_guide/" . $guides[$counter + 1]->id . "'>";
+                $html_text .= "<div><i class='ni ni-folder-17'></i><span>";
+                $html_text .= "<h3>" . $guides[$counter + 1]->title . "</h3>";
+                $html_text .= "<p>" . $guides[$counter + 1]->description . "</p>";
+                $html_text .= "</span></div></a>";
+            }
+            $html_text .= "</div></div>";
+
+            $counter += 2;
+        }
+
+        return json_encode([
+            "last_guide_id" => $guides[count($guides) - 1]->id,
+            "html" => $html_text
+        ]);
     }
 }

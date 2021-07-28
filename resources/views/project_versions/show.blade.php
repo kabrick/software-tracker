@@ -138,6 +138,12 @@
 
                         @php $counter += 2; @endphp
                     @endwhile
+
+                    @if($guides_count > 3)
+                        <div id="guides_container"></div>
+                        <br>
+                        <a href="#view_more_guides" id="view_more_guides">View More Guides</a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -146,4 +152,29 @@
 @endsection
 
 @push('js')
+    <script>
+        let last_guide_id = 1;
+        let id = <?php echo $project_version->id; ?>;
+
+        $('#view_more_guides').click(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                method: 'POST',
+                url: '/project_versions/view_more_guides',
+                data: {'id': id, 'last_guide_id': last_guide_id},
+                success: function(response){
+                    let responseArray = JSON.parse(response);
+
+                    last_guide_id = responseArray["last_guide_id"];
+                    $("#guides_container").append(responseArray["html"]);
+
+                    window.location.href = '#view_more_guides';
+                }
+            });
+        });
+    </script>
 @endpush
