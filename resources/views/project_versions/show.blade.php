@@ -54,7 +54,7 @@
 
                             <br><br>
 
-                            <a href="#" class="btn btn-outline-info btn-rounded col-md-12">View Project Version Features</a>
+                            <a href="/project_version_features/view_features/{{ $project_version->id }}" class="btn btn-outline-info btn-rounded col-md-12">View Project Version Features</a>
                         </div>
                         <div class="col-md-2">
                             <a href="/project_versions/{{ $project_version->id }}/edit" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
