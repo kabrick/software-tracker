@@ -64,5 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_version_features/view_features/{id}', ['uses' => 'ProjectVersionFeaturesController@view_features']);
     Route::any('project_version_features/create_feature/{parent_id}/{version_id}', ['uses' => 'ProjectVersionFeaturesController@create_feature']);
     Route::any('project_version_features/store_feature', ['as' => 'project_version_features.store_feature', 'uses' => 'ProjectVersionFeaturesController@store_feature']);
+    Route::any('project_version_features/feature_details/{id}', ['uses' => 'ProjectVersionFeaturesController@feature_details']);
+    Route::any('project_version_features/fetch_child_features/{id}', ['uses' => 'ProjectVersionFeaturesController@fetch_child_features']);
 });
 
