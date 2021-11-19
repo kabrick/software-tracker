@@ -144,6 +144,10 @@
                         <br>
                         <a href="#view_more_guides" id="view_more_guides">View More Guides</a>
                     @endif
+
+                    <br><br>
+
+                    <a href="{{ route('project_versions.view_archived_guides') }}" class="btn btn-default btn-rounded btn-sm text-white">View Archived Project Version Guides</a>
                 </div>
             </div>
         </div>

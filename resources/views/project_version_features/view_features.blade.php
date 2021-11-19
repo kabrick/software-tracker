@@ -18,6 +18,8 @@
                     <h3 class="mb-0">Project Version Features</h3>
                 </div>
                 <div class="card-body">
+                    @include('flash::message')
+
                     @if(count($features_array) > 0)
                         <ul class="list-group list-group-heading">
                             @foreach($features_array as $feature)

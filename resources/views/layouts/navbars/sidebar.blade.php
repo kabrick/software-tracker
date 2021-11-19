@@ -16,29 +16,6 @@
                         <i class="ni ni-planet text-blue"></i> Theme Guide
                     </a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="ni ni-archive-2 text-blue"></i>
-                        <span class="nav-link-text">Archived Items</span>
-                    </a>
-
-                    <div class="collapse show" id="navbar-examples">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('projects.view_archived_projects') }}">Projects</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('projects.view_archived_versions') }}">Project Versions</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('project_versions.view_archived_guides') }}">Project Version Guides</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
             </ul>
         </div>
     </div>

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('styles')
+    <style></style>
+@endpush
+
 @section('content')
 
     <div class="row justify-content-center">
@@ -18,6 +22,8 @@
                     <h3 class="mb-0">Create Project Version Features</h3>
                 </div>
                 <div class="card-body">
+                    @include('flash::message')
+
                     {{ Form::open(['route' => 'project_version_features.store_feature', 'data-toggle' => 'validator', 'enctype' => 'multipart/form-data']) }}
 
                     {{ Form::hidden('version_id', $version_id) }}
@@ -47,7 +53,7 @@
 
                     <div class="form-group">
                         <label>Feature Description</label>
-                        <textarea name="description" class="form-control compulsory" required rows="7"></textarea>
+                        <textarea name="description" id="description"></textarea>
                     </div>
 
                     {{ Form::button('Submit',['type'=>'submit','class'=>'btn btn-success waves-effect waves-light m-r-10']) }}
@@ -62,7 +68,24 @@
 @endsection
 
 @push('js')
+    <script src="{{ asset('js/tiny_mce.js') }}"></script>
+
     <script>
+        tinymce.init({
+            selector: 'textarea#description', // Replace this CSS selector to match the placeholder element for TinyMCE
+            height: 400,
+            //menubar: false,
+            plugins: 'print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr ' +
+                'pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
+            menubar: 'insert format',
+            toolbar: 'undo redo | bold | fontselect fontsizeselect | alignleft aligncenter alignright alignjustify | numlist bullist | ' +
+                'forecolor backcolor | fullscreen preview save print | image media link',
+            init_instance_callback : function(editor) {
+                var freeTiny = document.querySelector('.tox .tox-notification--in');
+                freeTiny.style.display = 'none';
+            }
+        });
+
         function preview_image(element) {
             if (element.files) {
                 var filesAmount = element.files.length;

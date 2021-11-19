@@ -57,6 +57,11 @@ class ProjectVersionFeaturesController extends Controller {
     }
 
     public function store_feature(Request $request) {
+        if (is_null($request->description) || $request->description == '') {
+            flash('Please make sure to add a description before submitting')->error();
+            return back()->withInput();
+        }
+
         $feature = new ProjectVersionFeature();
         $feature->version_id = $request->version_id;
         $feature->parent_version_id = $request->parent_id;

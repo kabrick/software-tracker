@@ -105,6 +105,10 @@
 
                         @php $counter += 2; @endphp
                     @endwhile
+
+                    <br><br>
+
+                    <a href="{{ route('projects.view_archived_versions') }}" class="btn btn-default btn-rounded btn-sm text-white">View Archived Project Versions</a>
                 </div>
             </div>
         </div>
