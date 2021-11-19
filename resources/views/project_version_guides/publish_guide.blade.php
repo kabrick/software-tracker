@@ -47,7 +47,7 @@
                         @if($counter > 1) <hr> @endif
                         <div class='row'>
                             <div class='col-md-6'>
-                                <img src='{{ $step->images }}' width='600' height='250' alt='image' id='image_preview1'>
+                                <img src='{{ $step->images }}' width='600' height='250' alt='image' id='image_preview1' class="modal-image">
                             </div>
                             <div class='col-md-6'>
                                 <h3>Step {{ $counter }}</h3>

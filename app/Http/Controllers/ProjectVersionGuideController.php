@@ -105,7 +105,8 @@ class ProjectVersionGuideController extends Controller {
     public function publish_guide($id) {
         $guide = ProjectVersionGuide::find($id);
 
-        $project_versions = DB::table('project_versions')->whereNotIn('id', [$guide->version_id])->get(['id', 'name']);
+        $project_versions = DB::table('project_versions')
+            ->whereNull('deleted_at')->whereNotIn('id', [$guide->version_id])->get(['id', 'name']);
 
         return view('project_version_guides.publish_guide', compact('guide', 'project_versions'));
     }

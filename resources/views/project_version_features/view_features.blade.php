@@ -53,11 +53,16 @@
                         </ul>
 
                         <br><br>
-
-                        <a href="/project_version_features/create_feature/0/{{ $version_id }}" class="btn btn-outline-success btn-rounded col-md-12">Add top level feature for this project version</a>
-                    @else
-                        <a href="/project_version_features/create_feature/0/{{ $version_id }}" class="btn btn-outline-success btn-rounded col-md-12">Create your first feature for this project version</a>
                     @endif
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="/project_version_features/create_feature/0/{{ $version_id }}" class="btn btn-outline-success btn-rounded col-md-12">Add top level feature for this project version</a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{{ route('project_version_features.view_archived') }}" class="btn btn-outline-default btn-rounded col-md-12">View Archived Project Version Features</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

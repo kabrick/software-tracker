@@ -15,6 +15,7 @@ class ProjectVersionFeaturesController extends Controller {
         $features = DB::table('project_version_features')
             ->where('version_id', $version_id)
             ->where('parent_version_id', 0)
+            ->whereNull('deleted_at')
             ->get(['id', 'title', 'parent_version_id']);
 
         $features_array = [];
@@ -24,6 +25,7 @@ class ProjectVersionFeaturesController extends Controller {
             $child_features = DB::table('project_version_features')
                 ->where('version_id', $version_id)
                 ->where('parent_version_id', $feature->id)
+                ->whereNull('deleted_at')
                 ->get(['id', 'title']);
 
             $child_features_array = [];
@@ -33,6 +35,7 @@ class ProjectVersionFeaturesController extends Controller {
                 $child_features_count = DB::table('project_version_features')
                     ->where('version_id', $version_id)
                     ->where('parent_version_id', $child_feature->id)
+                    ->whereNull('deleted_at')
                     ->count();
 
                 $child_features_array[] = [
@@ -81,12 +84,20 @@ class ProjectVersionFeaturesController extends Controller {
     }
 
     public function feature_details($id) {
-        //
+        $feature = ProjectVersionFeature::find($id);
+
+        $child_features = DB::table('project_version_features')
+            ->where('parent_version_id', $id)
+            ->whereNull('deleted_at')
+            ->get(['id', 'title']);
+
+        return view('project_version_features.feature_details', compact('id', 'feature', 'child_features'));
     }
 
     public function fetch_child_features($id): string {
         $child_features = DB::table('project_version_features')
             ->where('parent_version_id', $id)
+            ->whereNull('deleted_at')
             ->get(['id', 'title']);
 
         $html = "<hr><ul>";
@@ -112,5 +123,81 @@ class ProjectVersionFeaturesController extends Controller {
         $html .= "</ul>";
 
         return $html;
+    }
+
+    public function archive($id) {
+        $feature = ProjectVersionFeature::find($id);
+
+        if ($feature->delete()) {
+            flash("Project version feature has been archived")->success();
+            return redirect('/project_versions/' . $feature->version_id);
+        } else {
+            flash("An error occurred. Project version feature was not archived")->error();
+            return back()->withInput();
+        }
+    }
+
+    public function delete($id) {
+        $feature = ProjectVersionFeature::find($id);
+
+        if ($feature->forceDelete()) {
+            flash("Project version feature has been deleted")->success();
+            return redirect('/project_versions/' . $feature->version_id);
+        } else {
+            flash("An error occurred. Project version feature was not deleted")->error();
+            return back()->withInput();
+        }
+    }
+
+    public function view_archived() {
+        $features = ProjectVersionFeature::onlyTrashed()->get();
+
+        return view('project_version_features.view_archived', compact('features'));
+    }
+
+    public function restore($id) {
+        $feature = ProjectVersionFeature::withTrashed()->find($id);
+
+        if($feature->restore()){
+            flash("Project version feature has been restored")->success();
+            return redirect('project_version_features/feature_details/' . $feature->id);
+        } else {
+            flash("An error occurred. Project version feature was not restored")->error();
+            return back()->withInput();
+        }
+    }
+
+    public function edit($id) {
+        $feature = ProjectVersionFeature::find($id);
+
+        return view('project_version_features.edit', compact('id', 'feature'));
+    }
+
+    public function update(Request $request) {
+        $id = $request->id;
+
+        if (is_null($request->description) || $request->description == '') {
+            flash('Please make sure to add a description before submitting')->error();
+            return back()->withInput();
+        }
+
+        $feature = ProjectVersionFeature::find($id);
+        $feature->version_id = $request->version_id;
+        $feature->parent_version_id = $request->parent_id;
+        $feature->title = $request->title;
+        $feature->description = $request->description;
+        $feature->updated_by = Auth::user()->id;
+
+        if ($request->file('feature_image')) {
+            $feature_image = $request->file('feature_image');
+            $feature_image_name = Carbon::now()->timestamp . "." . $feature_image->getClientOriginalExtension();
+            $feature_image_path = $feature_image->storeAs('uploads/guides_images', $feature_image_name, 'public');
+            $feature->image = "/storage/" . $feature_image_path;
+        }
+
+        $feature->save();
+
+        flash("Feature has been updated successfully")->success();
+        return redirect('project_version_features/feature_details/' . $id);
     }
 }

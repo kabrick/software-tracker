@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\DB;
 class ProjectsController extends Controller {
 
     public function index() {
-        $projects = DB::table('projects')->get();
+        $projects = DB::table('projects')
+            ->whereNull('deleted_at')->get();
 
         return view('projects.index', compact('projects'));
     }
