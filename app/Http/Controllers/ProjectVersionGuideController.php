@@ -176,4 +176,10 @@ class ProjectVersionGuideController extends Controller {
 
         return "Guide was successfully cloned to the " . get_name($version_id, 'id', 'name', 'project_versions') . " project version";
     }
+
+    public function present_guide($id) {
+        $guide = ProjectVersionGuide::find($id);
+
+        return view('project_version_guides.present_guide', compact('guide'));
+    }
 }
