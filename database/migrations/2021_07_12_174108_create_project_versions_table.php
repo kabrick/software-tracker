@@ -16,9 +16,6 @@ class CreateProjectVersionsTable extends Migration {
             $table->integer('project_id');
             $table->string('name');
             $table->text('description');
-            $table->longText('contact_names');
-            $table->longText('contact_phones');
-            $table->longText('contact_emails');
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
             $table->timestamps();

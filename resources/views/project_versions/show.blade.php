@@ -18,58 +18,31 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-8">
                             <h4>Description</h4>
 
                             <p>{{ $project_version->description }}</p>
-
-                            @php
-                            $contact_names = explode(",", $project_version->contact_names);
-                            $contact_phones = explode(",", $project_version->contact_phones);
-                            $contact_emails = explode(",", $project_version->contact_emails);
-                            @endphp
-
-                            <h4>Project Contacts</h4>
-
-                            <div class="table-responsive">
-                                <table class="table align-items-center table-flush">
-                                    <thead class="thead-light">
-                                    <tr>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Phone</th>
-                                        <th scope="col">Email</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @for($i = 0; $i < count($contact_names); $i++)
-                                        <tr>
-                                            <td>{{ $contact_names[$i] }}</td>
-                                            <td>{{ $contact_phones[$i] }}</td>
-                                            <td>{{ $contact_emails[$i] }}</td>
-                                        </tr>
-                                    @endfor
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <br><br>
-
-                            <a href="/project_version_features/view_features/{{ $project_version->id }}" class="btn btn-outline-info btn-rounded col-md-12">View Project Version Features</a>
                         </div>
-                        <div class="col-md-2">
-                            <a href="/project_versions/{{ $project_version->id }}/edit" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
-
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="/project_versions/{{ $project_version->id }}/edit" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="#" class="btn btn-outline-success btn-rounded col-md-12">Clone</a>
+                                </div>
+                            </div>
                             <hr>
-
-                            <a href="#" class="btn btn-outline-success btn-rounded col-md-12">Clone</a>
-
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="/project_versions/archive_version/{{ $project_version->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this project version')">Archive</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="/project_versions/delete_version/{{ $project_version->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this project version')">Delete</a>
+                                </div>
+                            </div>
                             <hr>
-
-                            <a href="/project_versions/archive_version/{{ $project_version->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this project version')">Archive</a>
-
-                            <hr>
-
-                            <a href="/project_versions/delete_version/{{ $project_version->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this project version')">Delete</a>
+                            <a href="/project_version_features/view_features/{{ $project_version->id }}" class="btn btn-outline-info btn-rounded col-md-12">View Project Version Features</a>
                         </div>
                     </div>
 

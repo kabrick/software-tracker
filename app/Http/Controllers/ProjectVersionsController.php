@@ -38,9 +38,6 @@ class ProjectVersionsController extends Controller {
             $project_version->name = $request->name;
             $project_version->description = $request->description;
             $project_version->project_id = session()->get("project_id");
-            $project_version->contact_names = implode(",", str_replace(",", "-", $request->contact_names));
-            $project_version->contact_phones = implode(",", str_replace(",", "-", $request->contact_phones));
-            $project_version->contact_emails = implode(",", str_replace(",", "-", $request->contact_emails));
             $project_version->created_by = Auth::user()->id;
 
             $project_version->save();
@@ -86,9 +83,6 @@ class ProjectVersionsController extends Controller {
 
             $project_version->name = $request->name;
             $project_version->description = $request->description;
-            $project_version->contact_names = implode(",", str_replace(",", "-", $request->contact_names));
-            $project_version->contact_phones = implode(",", str_replace(",", "-", $request->contact_phones));
-            $project_version->contact_emails = implode(",", str_replace(",", "-", $request->contact_emails));
             $project_version->updated_by = Auth::user()->id;
 
             $project_version->save();
