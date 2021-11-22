@@ -51,7 +51,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_versions/view_archived_guides', ['as' => 'project_versions.view_archived_guides', 'uses' => 'ProjectVersionGuideController@view_archived_guides']);
     Route::any('project_versions/restore_guide/{id}', ['uses' => 'ProjectVersionGuideController@restore_guide']);
     Route::any('project_versions/clone_guide/{id}/{version_id}', ['uses' => 'ProjectVersionGuideController@clone_guide']);
-    Route::any('project_versions/present_guide/{id}', ['uses' => 'ProjectVersionGuideController@present_guide']);
 
     // Project Versions
     Route::any('project_versions/archive_version/{id}', ['uses' => 'ProjectVersionsController@archive_version']);

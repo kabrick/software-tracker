@@ -61,7 +61,7 @@
                     @endforeach
 
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <a href="/project_versions/edit_guide/{{ $guide->id }}" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
                         </div>
                         <div class="col-md-3">
@@ -70,13 +70,18 @@
                         <div class="col-md-3">
                             <a href="/project_versions/archive_guide/{{ $guide->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this guide')">Archive</a>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <a href="/project_versions/delete_guide/{{ $guide->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this guide')">Delete</a>
                         </div>
-                        <div class="col-md-2">
-                            <a href="/project_versions/present_guide/{{ $guide->id }}/" class="btn btn-outline-default btn-rounded col-md-12">Present Guide</a>
-                        </div>
                     </div>
+
+                    <!-- just need to store this code here -->
+                    {{--<section class="pb-4">
+                        <div class="bg-white border rounded-5">
+                            <section class="p-4 text-center w-100"></section>
+                            <div class="p-4 text-center border-top">This is where the text should be</div>
+                        </div>
+                    </section>--}}
                 </div>
             </div>
         </div>
