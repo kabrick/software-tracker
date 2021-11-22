@@ -74,11 +74,6 @@ class ProjectVersionFeaturesController extends Controller {
         $feature->description = $request->description;
         $feature->created_by = Auth::user()->id;
 
-        $feature_image = $request->file('feature_image');
-        $feature_image_name = Carbon::now()->timestamp . "." . $feature_image->getClientOriginalExtension();
-        $feature_image_path = $feature_image->storeAs('uploads/guides_images', $feature_image_name, 'public');
-        $feature->image = "/storage/" . $feature_image_path;
-
         $feature->save();
 
         flash("Feature has been created successfully")->success();
@@ -194,13 +189,6 @@ class ProjectVersionFeaturesController extends Controller {
         $feature->title = $request->title;
         $feature->description = $request->description;
         $feature->updated_by = Auth::user()->id;
-
-        if ($request->file('feature_image')) {
-            $feature_image = $request->file('feature_image');
-            $feature_image_name = Carbon::now()->timestamp . "." . $feature_image->getClientOriginalExtension();
-            $feature_image_path = $feature_image->storeAs('uploads/guides_images', $feature_image_name, 'public');
-            $feature->image = "/storage/" . $feature_image_path;
-        }
 
         $feature->save();
 

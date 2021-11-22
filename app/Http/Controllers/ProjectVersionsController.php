@@ -248,7 +248,6 @@ class ProjectVersionsController extends Controller {
         $new_feature->version_id = $version_id;
         $new_feature->title = $old_feature->title;
         $new_feature->description = $old_feature->description;
-        $new_feature->image = $old_feature->image;
         $new_feature->parent_version_id = $parent_version_id;
         $new_feature->is_published = $old_feature->is_published;
         $new_feature->created_by = Auth::user()->id;

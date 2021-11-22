@@ -30,24 +30,10 @@
                     {{ Form::hidden('parent_id', $feature->parent_version_id) }}
                     {{ Form::hidden('id', $feature->id) }}
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <img src='{{ $feature->image }}' width='600' height='250' alt='image' id='image_preview'>
-                        </div>
-                        <div class="col-md-6">
-                            <div class='custom-file'>
-                                <input type='file' name='feature_image' class='custom-file-input chosen_image' onchange='preview_image(this)'>
-                                <label class='custom-file-label' for='feature_image'>Choose image</label>
-                            </div>
-
-                            <hr>
-
-                            <div class="form-group">
-                                <label>Feature Title</label>
-                                {{ Form::text('title', $feature->title, ['class' => 'form-control compulsory', 'required']) }}
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label>Feature Title</label>
+                        {{ Form::text('title', $feature->title, ['class' => 'form-control compulsory', 'required']) }}
+                        <div class="help-block with-errors"></div>
                     </div>
 
                     <hr>
