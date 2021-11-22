@@ -29,16 +29,16 @@
                                     <a href="/project_versions/{{ $project_version->id }}/edit" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="#" class="btn btn-outline-success btn-rounded col-md-12">Clone</a>
+                                    <a href="/project_versions/clone/{{ $project_version->id }}" class="btn btn-outline-success btn-rounded col-md-12" onclick="return confirm('Are you sure you want to clone this project version? This will replicate all the guides and features included.')">Clone</a>
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <a href="/project_versions/archive_version/{{ $project_version->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this project version')">Archive</a>
+                                    <a href="/project_versions/archive_version/{{ $project_version->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this project version?')">Archive</a>
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="/project_versions/delete_version/{{ $project_version->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this project version')">Delete</a>
+                                    <a href="/project_versions/delete_version/{{ $project_version->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this project version?')">Delete</a>
                                 </div>
                             </div>
                             <hr>

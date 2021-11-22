@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProjectVersion;
+use App\Models\ProjectVersionFeature;
 use App\Models\ProjectVersionGuide;
+use App\Models\ProjectVersionGuidesStep;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProjectVersionsController extends Controller {
     /**
@@ -181,5 +184,81 @@ class ProjectVersionsController extends Controller {
             "last_guide_id" => $guides[count($guides) - 1]->id,
             "html" => $html_text
         ]);
+    }
+
+    public function clone($id) {
+        $logged_in = Auth::user()->id;
+
+        // create a new project version
+        $project_version = DB::table('project_versions')->where('id', $id)->first();
+
+        $new_project_version = new ProjectVersion();
+        $new_project_version->project_id = $project_version->project_id;
+        $new_project_version->name = $project_version->name;
+        $new_project_version->description = $project_version->description;
+        $new_project_version->created_by = $logged_in;
+        $new_project_version->save();
+
+        $new_project_version_id = $new_project_version->id;
+
+        // create new project guides
+        $project_version_guides = DB::table('project_version_guides')
+            ->where('version_id', $id)->get();
+
+        foreach ($project_version_guides as $guide) {
+            $new_guide = new ProjectVersionGuide();
+            $new_guide->version_id = $new_project_version_id;
+            $new_guide->title = $guide->title;
+            $new_guide->description = $guide->description;
+            $new_guide->created_by = $logged_in;
+            $new_guide->save();
+
+            $new_guide_id = $new_guide->id;
+
+            $guide_steps = DB::table('project_version_guides_steps')
+                ->where('guide_id', $guide->id)->get();
+
+            foreach ($guide_steps as $step) {
+                $new_step = new ProjectVersionGuidesStep();
+                $new_step->guide_id = $new_guide_id;
+                $new_step->images = $step->images;
+                $new_step->description = $step->description;
+                $new_step->created_by = $logged_in;
+                $new_step->save();
+            }
+        }
+
+        // create new project features
+        $project_version_features = DB::table('project_version_features')
+            ->where('version_id', $id)->where('parent_version_id', 0)->get();
+
+        foreach ($project_version_features as $feature) {
+            $this->create_new_feature($feature->id, $new_project_version_id, 0);
+        }
+
+        flash("Project version has been cloned successfully")->success();
+        return redirect('/project_versions/' . $new_project_version_id);
+    }
+
+    // recursive function to view child features
+    public function create_new_feature($feature_id, $version_id, $parent_version_id) {
+        $old_feature = ProjectVersionFeature::find($feature_id);
+
+        $new_feature = new ProjectVersionFeature();
+        $new_feature->version_id = $version_id;
+        $new_feature->title = $old_feature->title;
+        $new_feature->description = $old_feature->description;
+        $new_feature->image = $old_feature->image;
+        $new_feature->parent_version_id = $parent_version_id;
+        $new_feature->is_published = $old_feature->is_published;
+        $new_feature->created_by = Auth::user()->id;
+        $new_feature->save();
+
+        $project_version_features = DB::table('project_version_features')
+            ->where('parent_version_id', $feature_id)->get();
+
+        foreach ($project_version_features as $feature) {
+            $this->create_new_feature($feature->id, $version_id, $new_feature->id);
+        }
     }
 }

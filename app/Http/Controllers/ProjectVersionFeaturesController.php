@@ -16,7 +16,7 @@ class ProjectVersionFeaturesController extends Controller {
             ->where('version_id', $version_id)
             ->where('parent_version_id', 0)
             ->whereNull('deleted_at')
-            ->get(['id', 'title', 'parent_version_id']);
+            ->get(['id', 'title', 'parent_version_id', 'is_published']);
 
         $features_array = [];
 
@@ -26,7 +26,7 @@ class ProjectVersionFeaturesController extends Controller {
                 ->where('version_id', $version_id)
                 ->where('parent_version_id', $feature->id)
                 ->whereNull('deleted_at')
-                ->get(['id', 'title']);
+                ->get(['id', 'title', 'is_published']);
 
             $child_features_array = [];
 
@@ -41,6 +41,7 @@ class ProjectVersionFeaturesController extends Controller {
                 $child_features_array[] = [
                     "id" => $child_feature->id,
                     "title" => $child_feature->title,
+                    "is_published" => $child_feature->is_published,
                     "count" => $child_features_count,
                 ];
             }
@@ -48,6 +49,7 @@ class ProjectVersionFeaturesController extends Controller {
             $features_array[] = [
                 "id" => $feature->id,
                 "title" => $feature->title,
+                "is_published" => $feature->is_published,
                 "children" => $child_features_array,
             ];
         }
@@ -98,7 +100,7 @@ class ProjectVersionFeaturesController extends Controller {
         $child_features = DB::table('project_version_features')
             ->where('parent_version_id', $id)
             ->whereNull('deleted_at')
-            ->get(['id', 'title']);
+            ->get(['id', 'title', 'is_published']);
 
         $html = "<hr><ul>";
 
@@ -111,6 +113,11 @@ class ProjectVersionFeaturesController extends Controller {
             $html .= '<li class="list-group-item"><div class="row">';
             $html .= '<div class="col">';
             $html .= '<a href="/project_version_features/feature_details/' . $child_feature->id . '" style="color: #1a174d">' . $child_feature->title . '</a>';
+
+            if ($child_feature->is_published == 0) {
+                $html .= '&nbsp;&nbsp;<span class="text-red">Unpublished</span>';
+            }
+
             $html .= '</div>';
 
             if ($child_features_count > 0) {
@@ -198,6 +205,34 @@ class ProjectVersionFeaturesController extends Controller {
         $feature->save();
 
         flash("Feature has been updated successfully")->success();
+        return redirect('project_version_features/feature_details/' . $id);
+    }
+
+    public function publish($id) {
+        $feature = ProjectVersionFeature::find($id);
+        $feature->is_published = 1;
+        $feature->updated_by = Auth::user()->id;
+
+        if ($feature->save()) {
+            flash("Feature has been published successfully")->success();
+        } else {
+            flash("An error occurred. Please try again!")->success();
+        }
+
+        return redirect('project_version_features/feature_details/' . $id);
+    }
+
+    public function unpublish($id) {
+        $feature = ProjectVersionFeature::find($id);
+        $feature->is_published = 0;
+        $feature->updated_by = Auth::user()->id;
+
+        if ($feature->save()) {
+            flash("Feature has been un-published successfully")->success();
+        } else {
+            flash("An error occurred. Please try again!")->success();
+        }
+
         return redirect('project_version_features/feature_details/' . $id);
     }
 }

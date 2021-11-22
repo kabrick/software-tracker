@@ -18,6 +18,8 @@
                     <h3 class="mb-0">{{ $feature->title }}</h3>
                 </div>
                 <div class="card-body">
+                    @include('flash::message')
+
                     <div class="row">
                         <div class="col-md-8">
                             <img src='{{ $feature->image }}' width='800' height='350' alt='image' class="modal-image img-center">
@@ -45,7 +47,18 @@
 
                             <hr>
 
-                            <a href="/project_version_features/create_feature/{{ $feature->id }}/{{ $feature->version_id }}" class="btn btn-outline-default btn-rounded col-md-12">Add Child Feature</a>
+                            <div class="row">
+                                <div class="col">
+                                    <a href="/project_version_features/create_feature/{{ $feature->id }}/{{ $feature->version_id }}" class="btn btn-outline-default btn-rounded col-md-12">Add Child Feature</a>
+                                </div>
+                                <div class="col">
+                                    @if($feature->is_published == 0)
+                                        <a href="/project_version_features/publish/{{ $feature->id }}" class="btn btn-outline-default btn-rounded col-md-12">Publish</a>
+                                    @else
+                                        <a href="/project_version_features/unpublish/{{ $feature->id }}" class="btn btn-outline-default btn-rounded col-md-12">Un-publish</a>
+                                    @endif
+                                </div>
+                            </div>
 
                             @if(count($child_features) > 0)
                                 <hr>

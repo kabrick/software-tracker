@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_versions/view_archived_versions', ['as' => 'projects.view_archived_versions', 'uses' => 'ProjectVersionsController@view_archived_versions']);
     Route::any('project_versions/restore_version/{id}', ['uses' => 'ProjectVersionsController@restore_version']);
     Route::any('project_versions/view_more_guides', ['uses' => 'ProjectVersionsController@view_more_guides']);
+    Route::any('project_versions/clone/{id}', ['uses' => 'ProjectVersionsController@clone']);
     Route::resource('project_versions', 'ProjectVersionsController');
 
     // Project Version Features
@@ -71,6 +72,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_version_features/view_archived', ['as' => 'project_version_features.view_archived', 'uses' => 'ProjectVersionFeaturesController@view_archived']);
     Route::any('project_version_features/restore/{id}', ['uses' => 'ProjectVersionFeaturesController@restore']);
     Route::any('project_version_features/edit/{id}', ['uses' => 'ProjectVersionFeaturesController@edit']);
+    Route::any('project_version_features/publish/{id}', ['uses' => 'ProjectVersionFeaturesController@publish']);
+    Route::any('project_version_features/unpublish/{id}', ['uses' => 'ProjectVersionFeaturesController@unpublish']);
     Route::any('project_version_features/update', ['as' => 'project_version_features.update', 'uses' => 'ProjectVersionFeaturesController@update']);
 });
 

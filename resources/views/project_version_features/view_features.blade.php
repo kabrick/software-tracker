@@ -25,6 +25,7 @@
                             @foreach($features_array as $feature)
                                 <li class="list-group-item">
                                     <a href="/project_version_features/feature_details/{{ $feature["id"] }}" style="color: #1a174d">{{ $feature["title"] }}</a>
+                                    @if($feature["is_published"] == 0)<span class="text-red">Unpublished</span>@endif
 
                                     @if(count($feature["children"]) > 0)
                                         <hr>
@@ -35,6 +36,7 @@
                                                     <div class="row">
                                                         <div class="col">
                                                             <a href="/project_version_features/feature_details/{{ $feature_children["id"] }}" style="color: #1a174d">{{ $feature_children["title"] }}</a>
+                                                            @if($feature_children["is_published"] == 0)<span class="text-red">Unpublished</span>@endif
                                                         </div>
                                                         @if($feature_children["count"] > 0)
                                                             <div class="col">
