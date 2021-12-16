@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProjectVersionFeature;
+use App\Models\ProjectVersionGuide;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -116,7 +117,7 @@ class ProjectVersionFeaturesController extends Controller {
             $html .= '</div>';
 
             if ($child_features_count > 0) {
-                $html .= '<div class="col"><a class="pull-right text-sm" href="#nested_features_' . $child_feature->id . '" onclick="fetch_child_features(' . $child_feature->id . ')">View Nested Features</a></div>';
+                $html .= '<div class="col"><a href="#nested_features_' . $child_feature->id . '" onclick="fetch_child_features(' . $child_feature->id . ')" id="nested_features_id_' . $child_feature->id . '"><i class="ni ni-bold-right float-right"></i></a></div>';
             }
 
             $html .= '</div><div id="nested_features_' . $child_feature->id . '"></div></li>';

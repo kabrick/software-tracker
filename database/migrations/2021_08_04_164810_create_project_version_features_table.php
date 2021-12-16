@@ -16,7 +16,6 @@ class CreateProjectVersionFeaturesTable extends Migration {
             $table->integer("version_id");
             $table->text("title");
             $table->longText("description");
-            $table->text("image");
             $table->integer("parent_version_id")->default(0);
             $table->integer("is_published")->default(0);
             $table->integer("created_by");

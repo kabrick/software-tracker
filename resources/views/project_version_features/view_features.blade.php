@@ -40,7 +40,9 @@
                                                         </div>
                                                         @if($feature_children["count"] > 0)
                                                             <div class="col">
-                                                                <a class="pull-right text-sm" href="#nested_features_{{ $feature_children["id"] }}" onclick="fetch_child_features({{ $feature_children["id"] }})" id="nested_features_id_{{ $feature_children["id"] }}">View Nested Features</a>
+                                                                <a href="#nested_features_{{ $feature_children["id"] }}" onclick="fetch_child_features({{ $feature_children["id"] }})" id="nested_features_id_{{ $feature_children["id"] }}">
+                                                                    <i class="ni ni-bold-right float-right"></i>
+                                                                </a>
                                                             </div>
                                                         @endif
                                                     </div>
@@ -83,12 +85,12 @@
                     method: 'GET',
                     url: '/project_version_features/fetch_child_features/' + id,
                     success: function(response){
-                        nested_features_id.text('Hide Nested Features');
+                        nested_features_id.html('<i class="ni ni-bold-down float-right"></i>');
                         nested_features_div.html(response);
                     }
                 });
             } else {
-                nested_features_id.text('View Nested Features');
+                nested_features_id.html('<i class="ni ni-bold-right float-right"></i>');
                 nested_features_div.html('');
             }
         }
