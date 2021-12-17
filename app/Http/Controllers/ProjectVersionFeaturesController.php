@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProjectVersionFeature;
 use App\Models\ProjectVersionGuide;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -223,5 +224,67 @@ class ProjectVersionFeaturesController extends Controller {
         }
 
         return redirect('project_version_features/feature_details/' . $id);
+    }
+
+    public function share_pdf($id) {
+        $features = DB::table('project_version_features')
+            ->where('version_id', $id)
+            ->where('parent_version_id', 0)
+            ->whereNull('deleted_at')
+            ->get(['id', 'title', 'description']);
+
+        $html = "";
+
+        $top_level = 1;
+
+        foreach($features as $feature) {
+            $html .= "<h3>$top_level   $feature->title</h3>";
+            $html .= "<br>$feature->description<br><br>";
+            $html .= $this->get_child_features($feature->id, $top_level, true);
+            $html .= "<hr>";
+
+            $top_level++;
+        }
+
+        $title = get_name(get_name($id, 'id', 'project_id', 'project_versions'), 'id', 'name', 'projects');
+
+        $data = [
+            'features' => $features,
+            'html' => $html,
+            'title' => $title
+        ];
+
+        $pdf = SnappyPDF::loadView('project_version_features/share_pdf', $data)
+            ->setOrientation('portrait')
+            ->setOption('margin-bottom', 7)
+            ->setOption('margin-top', 5)
+            ->setOption('footer-html', '<i>' . $title . '</i>');
+
+        return $pdf->inline($title . '.pdf');
+    }
+
+    public function get_child_features($parent_id, $current_level, $get_text): string {
+        $features = DB::table('project_version_features')
+            ->where('parent_version_id', $parent_id)
+            ->whereNull('deleted_at')
+            ->get(['id', 'title', 'description']);
+
+        $sub_level = 1;
+
+        $return_html = "";
+
+        foreach ($features as $feature) {
+            $return_html .= "<h3>$current_level.$sub_level   $feature->title</h3>";
+
+            if ($get_text) {
+                $return_html .= "<br>$feature->description<br><br>";
+            }
+
+            $return_html .= $this->get_child_features($feature->id, $current_level . "." . $sub_level, $get_text);
+
+            $sub_level++;
+        }
+
+        return $return_html;
     }
 }

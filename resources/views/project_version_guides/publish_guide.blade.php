@@ -61,18 +61,23 @@
                     @endforeach
 
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-2">
                             <a href="/project_versions/edit_guide/{{ $guide->id }}" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
                         </div>
-                        <div class="col-md-3">
-                            <a href="#" class="btn btn-outline-success btn-rounded col-md-12" onclick="clone_guide()">Clone To Another Project Version</a>
+                        <div class="col-md-2">
+                            <a href="#" class="btn btn-outline-success btn-rounded col-md-12" onclick="clone_guide()">Clone To Project Version</a>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <a href="/project_versions/share_guide_pdf/{{ $guide->id }}" target="_blank" class="btn btn-outline-primary btn-rounded col-md-12">Share PDF</a>
+                        </div>
+                        <div class="col-md-2">
                             <a href="/project_versions/archive_guide/{{ $guide->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this guide')">Archive</a>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <a href="/project_versions/delete_guide/{{ $guide->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this guide')">Delete</a>
                         </div>
+                        <div class="col-md-1"></div>
                     </div>
 
                     <!-- just need to store this code here -->

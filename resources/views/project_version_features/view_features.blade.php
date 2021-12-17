@@ -60,10 +60,13 @@
                     @endif
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <a href="/project_version_features/create_feature/0/{{ $version_id }}" class="btn btn-outline-success btn-rounded col-md-12">Add top level feature for this project version</a>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <a href="/project_version_features/share_pdf/{{ $version_id }}" target="_blank" class="btn btn-outline-primary btn-rounded col-md-12">Share PDF</a>
+                        </div>
+                        <div class="col-md-4">
                             <a href="{{ route('project_version_features.view_archived') }}" class="btn btn-outline-default btn-rounded col-md-12">View Archived Project Version Features</a>
                         </div>
                     </div>

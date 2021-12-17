@@ -35,7 +35,7 @@ class ProjectsController extends Controller {
 
             $project->save();
 
-            return redirect('/projects/');
+            return redirect('/home/');
         } else {
             flash("Project name was not entered")->error();
             return back()->withInput();
@@ -127,7 +127,7 @@ class ProjectsController extends Controller {
 
         if($project->restore()){
             flash("Project has been restored")->success();
-            return redirect('/projects/' . $project->id);
+            return redirect('/home/' . $project->id);
         } else {
             flash("An error occurred. Project was not restored")->error();
             return back()->withInput();

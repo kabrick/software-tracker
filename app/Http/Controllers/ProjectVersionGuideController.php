@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProjectVersionGuide;
 use App\Models\ProjectVersionGuidesStep;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -175,5 +176,24 @@ class ProjectVersionGuideController extends Controller {
         }
 
         return "Guide was successfully cloned to the " . get_name($version_id, 'id', 'name', 'project_versions') . " project version";
+    }
+
+    public function share_guide_pdf($id) {
+        $guide = ProjectVersionGuide::find($id);
+
+        $title = get_name(get_name($guide->version_id, 'id', 'project_id', 'project_versions'), 'id', 'name', 'projects');
+
+        $data = [
+            'guide' => $guide,
+            'title' => $title
+        ];
+
+        $pdf = SnappyPDF::loadView('project_version_guides/share_guide_pdf', $data)
+            ->setOrientation('portrait')
+            ->setOption('margin-bottom', 7)
+            ->setOption('margin-top', 5)
+            ->setOption('footer-html', '<i>' . $title . '</i>');
+
+        return $pdf->inline($title . '-' . $guide->title . '.pdf');
     }
 }

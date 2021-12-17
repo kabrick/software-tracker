@@ -9,7 +9,8 @@
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
                     <li class="breadcrumb-item"><a href="/projects/{{ get_name($feature->version_id, 'id', 'project_id', 'project_versions') }}">{{ get_name(get_name($feature->version_id, 'id', 'project_id', 'project_versions'), 'id', 'name', 'projects') }}</a></li>
                     <li class="breadcrumb-item"><a href="/project_versions/{{ $feature->version_id }}">{{ get_name($feature->version_id, 'id', 'name', 'project_versions') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Project Version Feature</li>
+                    <li class="breadcrumb-item"><a href="/project_version_features/view_features/{{ $feature->version_id }}">Project Version Features</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ $feature->title }}</li>
                 </ol>
             </nav>
 

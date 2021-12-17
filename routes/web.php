@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_versions/view_archived_guides', ['as' => 'project_versions.view_archived_guides', 'uses' => 'ProjectVersionGuideController@view_archived_guides']);
     Route::any('project_versions/restore_guide/{id}', ['uses' => 'ProjectVersionGuideController@restore_guide']);
     Route::any('project_versions/clone_guide/{id}/{version_id}', ['uses' => 'ProjectVersionGuideController@clone_guide']);
+    Route::any('project_versions/share_guide_pdf/{version_id}', ['uses' => 'ProjectVersionGuideController@share_guide_pdf']);
 
     // Project Versions
     Route::any('project_versions/archive_version/{id}', ['uses' => 'ProjectVersionsController@archive_version']);
@@ -75,5 +76,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_version_features/publish/{id}', ['uses' => 'ProjectVersionFeaturesController@publish']);
     Route::any('project_version_features/unpublish/{id}', ['uses' => 'ProjectVersionFeaturesController@unpublish']);
     Route::any('project_version_features/update', ['as' => 'project_version_features.update', 'uses' => 'ProjectVersionFeaturesController@update']);
+    Route::any('project_version_features/share_pdf/{version_id}', ['uses' => 'ProjectVersionFeaturesController@share_pdf']);
 });
 
