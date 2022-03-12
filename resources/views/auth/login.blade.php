@@ -44,6 +44,10 @@
                                 <button type="submit" class="btn btn-primary my-4">Sign in</button>
                             </div>
                         </form>
+
+                        <div class="text-center">
+                            <a href="{{ route('register') }}">Don't have an account? Sign up here</a>
+                        </div>
                     </div>
                 </div>
             </div>

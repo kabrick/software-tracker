@@ -9,7 +9,7 @@
             <div class="col-lg-6 col-md-8">
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-header bg-transparent">
-                        <div class="text-center"><h3>User Sign Up</h4></div>
+                        <div class="text-center"><h3>User Sign Up</h3></div>
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
                         <form role="form" method="POST" action="{{ route('register') }}">
@@ -28,6 +28,7 @@
                                     </span>
                                 @endif
                             </div>
+
                             <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
                                 <div class="input-group input-group-alternative mb-3">
                                     <div class="input-group-prepend">
@@ -41,6 +42,21 @@
                                     </span>
                                 @endif
                             </div>
+
+                            <div class="form-group{{ $errors->has('username') ? ' has-danger' : '' }}">
+                                <div class="input-group input-group-alternative mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                    </div>
+                                    <input class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}" placeholder="Username" type="text" name="username" value="{{ old('username') }}" required>
+                                </div>
+                                @if ($errors->has('username'))
+                                    <span class="invalid-feedback" style="display: block;" role="alert">
+                                        <strong>{{ $errors->first('username') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+
                             <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
                                 <div class="input-group input-group-alternative">
                                     <div class="input-group-prepend">
@@ -54,27 +70,7 @@
                                     </span>
                                 @endif
                             </div>
-                            <div class="form-group">
-                                <div class="input-group input-group-alternative">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                                    </div>
-                                    <input class="form-control" placeholder="{{ __('Confirm Password') }}" type="password" name="password_confirmation" required>
-                                </div>
-                            </div>
-                            <div class="text-muted font-italic">
-                                <small>{{ __('password strength') }}: <span class="text-success font-weight-700">{{ __('strong') }}strong</span></small>
-                            </div>
-                            <div class="row my-4">
-                                <div class="col-12">
-                                    <div class="custom-control custom-control-alternative custom-checkbox">
-                                        <input class="custom-control-input" id="customCheckRegister" type="checkbox">
-                                        <label class="custom-control-label" for="customCheckRegister">
-                                            <span class="text-muted">{{ __('I agree with the') }} <a href="#!">{{ __('Privacy Policy') }}</a></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary mt-4">{{ __('Create account') }}</button>
                             </div>

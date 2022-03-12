@@ -45,12 +45,12 @@ class RegisterController extends Controller {
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
+    protected function validator(array $data) {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'unique:users'],
-            'password' => ['required', 'string', 'confirmed'],
+            'password' => ['required', 'string'],
+            'email' => ['required', 'email'],
         ]);
     }
 
@@ -60,11 +60,11 @@ class RegisterController extends Controller {
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
-    {
+    protected function create(array $data) {
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'username' => $data['username'],
             'password' => Hash::make($data['password']),
         ]);
     }
