@@ -42,24 +42,7 @@
 
                     <hr>
 
-                    <div class="row">
-                        <div class="col-md-9">
-                            {!! $feature->description !!}
-                        </div>
-                        <div class="col-md-3">
-                            @if(count($child_features) > 0)
-                                <h4>Child Features</h4>
-
-                                <ul>
-                                    @foreach($child_features as $child_feature)
-                                        <li><a href="/project_version_features/feature_details/{{ $child_feature->id }}" style="color: #1a174d">{{ $child_feature->title }}</a></li>
-                                    @endforeach
-                                </ul>
-                            @endif
-
-                            <a href="/project_version_features/create_feature/{{ $feature->id }}/{{ $feature->version_id }}" class="btn btn-outline-default btn-rounded col-md-12">Add Child Feature</a>
-                        </div>
-                    </div>
+                    {!! $feature->description !!}
                 </div>
             </div>
         </div>

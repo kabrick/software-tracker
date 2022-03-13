@@ -63,11 +63,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('project_versions', 'ProjectVersionsController');
 
     // Project Version Features
-    Route::any('project_version_features/view_features/{id}', ['uses' => 'ProjectVersionFeaturesController@view_features']);
-    Route::any('project_version_features/create_feature/{parent_id}/{version_id}', ['uses' => 'ProjectVersionFeaturesController@create_feature']);
+    Route::any('project_version_features/create_feature/{parent_id}', ['uses' => 'ProjectVersionFeaturesController@create_feature']);
     Route::any('project_version_features/store_feature', ['as' => 'project_version_features.store_feature', 'uses' => 'ProjectVersionFeaturesController@store_feature']);
     Route::any('project_version_features/feature_details/{id}', ['uses' => 'ProjectVersionFeaturesController@feature_details']);
-    Route::any('project_version_features/fetch_child_features/{id}', ['uses' => 'ProjectVersionFeaturesController@fetch_child_features']);
     Route::any('project_version_features/archive/{id}', ['uses' => 'ProjectVersionFeaturesController@archive']);
     Route::any('project_version_features/delete/{id}', ['uses' => 'ProjectVersionFeaturesController@delete']);
     Route::any('project_version_features/view_archived', ['as' => 'project_version_features.view_archived', 'uses' => 'ProjectVersionFeaturesController@view_archived']);
@@ -77,5 +75,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_version_features/unpublish/{id}', ['uses' => 'ProjectVersionFeaturesController@unpublish']);
     Route::any('project_version_features/update', ['as' => 'project_version_features.update', 'uses' => 'ProjectVersionFeaturesController@update']);
     Route::any('project_version_features/share_pdf/{version_id}', ['uses' => 'ProjectVersionFeaturesController@share_pdf']);
+
+    // Project Version Modules
+    Route::any('project_version_modules/view/{project_version_id}', ['uses' => 'ProjectVersionModuleController@view']);
+    Route::any('project_version_modules/create', ['uses' => 'ProjectVersionModuleController@create']);
+    Route::any('project_version_modules/edit', ['uses' => 'ProjectVersionModuleController@edit']);
+    Route::any('project_version_modules/fetch_modules/{parent_module_id}', ['uses' => 'ProjectVersionModuleController@fetch_modules']);
+    Route::any('project_version_modules/fetch_module_details/{module_id}', ['uses' => 'ProjectVersionModuleController@fetch_module_details']);
+    Route::any('project_version_modules/archive/{module_id}', ['uses' => 'ProjectVersionModuleController@archive']);
 });
 

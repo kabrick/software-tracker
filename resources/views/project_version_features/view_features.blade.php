@@ -30,27 +30,7 @@
                                     @if(count($feature["children"]) > 0)
                                         <hr>
 
-                                        <ul>
-                                            @foreach($feature["children"] as $feature_children)
-                                                <li class="list-group-item">
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <a href="/project_version_features/feature_details/{{ $feature_children["id"] }}" style="color: #1a174d">{{ $feature_children["title"] }}</a>
-                                                            @if($feature_children["is_published"] == 0)<span class="text-red">Unpublished</span>@endif
-                                                        </div>
-                                                        @if($feature_children["count"] > 0)
-                                                            <div class="col">
-                                                                <a href="#nested_features_{{ $feature_children["id"] }}" onclick="fetch_child_features({{ $feature_children["id"] }})" id="nested_features_id_{{ $feature_children["id"] }}">
-                                                                    <i class="ni ni-bold-right float-right"></i>
-                                                                </a>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-
-                                                    <div id="nested_features_{{ $feature_children["id"] }}"></div>
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                        <ul></ul>
                                     @endif
                                 </li>
                             @endforeach

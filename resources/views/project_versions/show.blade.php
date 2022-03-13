@@ -41,23 +41,21 @@
                                     <a href="/project_versions/delete_version/{{ $project_version->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this project version?')">Delete</a>
                                 </div>
                             </div>
-                            <hr>
-                            <a href="/project_version_features/view_features/{{ $project_version->id }}" class="btn btn-outline-info btn-rounded col-md-12">View Project Version Features</a>
                         </div>
                     </div>
 
                     <hr>
 
-                    <h4>Guides</h4>
+                    <h4>Latest Project Version Module Features</h4>
 
                     <div class="row">
                         <div class="col-md-6">
-                            <a class="btn-icon-clipboard" title="Add New Guide" href="/project_versions/create_guide/{{ $project_version->id }}">
+                            <a class="btn-icon-clipboard" title="Add New Guide" href="/project_version_modules/view/{{ $project_version->id }}">
                                 <div>
                                     <i class="ni ni-fat-add"></i>
                                     <span>
-                                        <h3>Add New Guide</h3>
-                                        <p>Add a new guide to help users perform actions in your application</p>
+                                        <h3>View Modules</h3>
+                                        <p>Create and manage existing project version modules as well as managing module features</p>
                                     </span>
                                 </div>
                             </a>
@@ -112,7 +110,7 @@
                         @php $counter += 2; @endphp
                     @endwhile
 
-                    @if($guides_count > 3)
+                    @if($guides_count > 1)
                         <div id="guides_container"></div>
                         <br>
                         <a href="#view_more_guides" id="view_more_guides">View More Guides</a>
@@ -134,11 +132,6 @@
         let id = <?php echo $project_version->id; ?>;
 
         $('#view_more_guides').click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.ajax({
                 method: 'POST',
                 url: '/project_versions/view_more_guides',

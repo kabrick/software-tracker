@@ -26,8 +26,7 @@
 
                     {{ Form::open(['route' => 'project_version_features.store_feature', 'data-toggle' => 'validator', 'enctype' => 'multipart/form-data']) }}
 
-                    {{ Form::hidden('version_id', $version_id) }}
-                    {{ Form::hidden('parent_id', $parent_id) }}
+                    {{ Form::hidden('module_id', $parent_id) }}
 
                     <div class="form-group">
                         <label>Feature Title</label>

@@ -142,6 +142,13 @@
         @stack('js')
 
         <script>
+            // set up ajax callback
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             let modal = $('#modal_image_div');
 
             $('.modal-image').click(function () {

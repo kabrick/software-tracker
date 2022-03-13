@@ -59,7 +59,7 @@ class ProjectVersionsController extends Controller {
     public function show($id) {
         $project_version = ProjectVersion::find($id);
 
-        $guides = ProjectVersionGuide::where('version_id', $id)->limit(3)->get();
+        $guides = ProjectVersionGuide::where('version_id', $id)->limit(1)->get();
         $guides_count = ProjectVersionGuide::where('version_id', $id)->count();
 
         return view('project_versions.show', compact('project_version', 'guides', 'guides_count'));
