@@ -61,13 +61,13 @@
                             </a>
                         </div>
                         <div class="col-md-6">
-                            @if(count($guides) > 0)
-                                <a class="btn-icon-clipboard" title="{{ $guides[0]->title }}" href="/project_versions/publish_guide/{{ $guides[0]->id }}">
+                            @if(count($project_features) > 0)
+                                <a class="btn-icon-clipboard" title="{{ $project_features[0]->title }}" href="/project_version_features/feature_details/{{ $project_features[0]->id }}">
                                     <div>
-                                        <i class="ni ni-glasses-2"></i>
+                                        <i class="ni ni-folder-17"></i>
                                         <span>
-                                        <h3>{{ $guides[0]->title }}</h3>
-                                        <p>{{ $guides[0]->description }}</p>
+                                        <h3>{{ $project_features[0]->title }}</h3>
+                                        <p>Last updated By {{ $project_features[0]->name }} {{ \Carbon\Carbon::parse($project_features[0]->updated_at)->fromNow() }}</p>
                                     </span>
                                     </div>
                                 </a>
@@ -77,29 +77,29 @@
 
                     @php $counter = 1; @endphp
 
-                    @while($counter < count($guides))
+                    @while($counter < count($project_features))
                         <div class="row">
                             <div class="col-md-6">
-                                @if(isset($guides[$counter]))
-                                    <a class="btn-icon-clipboard" title="{{ $guides[$counter]->title }}" href="/project_versions/publish_guide/{{ $guides[$counter]->id }}">
+                                @if(isset($project_features[$counter]))
+                                    <a class="btn-icon-clipboard" title="{{ $project_features[$counter]->title }}" href="/project_version_features/feature_details/{{ $project_features[$counter]->id }}">
                                         <div>
                                             <i class="ni ni-folder-17"></i>
                                             <span>
-                                        <h3>{{ $guides[$counter]->title }}</h3>
-                                        <p>{{ $guides[$counter]->description }}</p>
+                                        <h3>{{ $project_features[$counter]->title }}</h3>
+                                        <p>Last updated By {{ $project_features[$counter]->name }} {{ \Carbon\Carbon::parse($project_features[$counter]->updated_at)->fromNow() }}</p>
                                     </span>
                                         </div>
                                     </a>
                                 @endif
                             </div>
                             <div class="col-md-6">
-                                @if(isset($guides[$counter + 1]))
-                                    <a class="btn-icon-clipboard" title="{{ $guides[$counter + 1]->title }}" href="/project_versions/publish_guide/{{ $guides[$counter + 1]->id }}">
+                                @if(isset($project_features[$counter + 1]))
+                                    <a class="btn-icon-clipboard" title="{{ $project_features[$counter + 1]->title }}" href="/project_version_features/feature_details/{{ $project_features[$counter + 1]->id }}">
                                         <div>
                                             <i class="ni ni-folder-17"></i>
                                             <span>
-                                        <h3>{{ $guides[$counter + 1]->title }}</h3>
-                                        <p>{{ $guides[$counter + 1]->description }}</p>
+                                        <h3>{{ $project_features[$counter + 1]->title }}</h3>
+                                        <p>Last updated By {{ $project_features[$counter + 1]->name }} {{ \Carbon\Carbon::parse($project_features[$counter + 1]->updated_at)->fromNow() }}</p>
                                     </span>
                                         </div>
                                     </a>
@@ -110,15 +110,9 @@
                         @php $counter += 2; @endphp
                     @endwhile
 
-                    @if($guides_count > 1)
-                        <div id="guides_container"></div>
-                        <br>
-                        <a href="#view_more_guides" id="view_more_guides">View More Guides</a>
-                    @endif
-
                     <br><br>
 
-                    <a href="{{ route('project_versions.view_archived_guides') }}" class="btn btn-default btn-rounded btn-sm text-white">View Archived Project Version Guides</a>
+                    <a href="/project_version_features/view_features/{{ $project_version->id }}" class="btn btn-default btn-rounded btn-sm text-white">View All Features</a>
                 </div>
             </div>
         </div>

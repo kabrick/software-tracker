@@ -59,10 +59,17 @@ class ProjectVersionsController extends Controller {
     public function show($id) {
         $project_version = ProjectVersion::find($id);
 
-        $guides = ProjectVersionGuide::where('version_id', $id)->limit(1)->get();
-        $guides_count = ProjectVersionGuide::where('version_id', $id)->count();
+        $project_features = ProjectVersionFeature::where('version_id', $id)
+            ->leftJoin('users', function ($join) {
+                $join->on('users.id', '=', 'project_version_features.created_by')
+                    ->orOn('users.id', '=', 'project_version_features.updated_by');
+            })
+            ->limit(7)
+            ->orderBy('project_version_features.updated_at', 'desc')
+            ->get(['project_version_features.id', 'project_version_features.title', 'project_version_features.is_published',
+                'users.name', 'project_version_features.updated_at']);
 
-        return view('project_versions.show', compact('project_version', 'guides', 'guides_count'));
+        return view('project_versions.show', compact('project_version', 'project_features'));
     }
 
     /**

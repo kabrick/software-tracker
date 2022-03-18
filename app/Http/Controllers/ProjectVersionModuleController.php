@@ -62,13 +62,23 @@ class ProjectVersionModuleController extends Controller {
 
         $module = ProjectVersionModule::find($module_id);
 
-        $html .= "<h4>Description</h4><p>" . $module->description . "</p>";
+        if ($module) {
+            $html .= "<h4>Description</h4><p>" . $module->description . "</p>";
 
-        $response = [
-            "title" => $module->title,
-            "description" => $module->description,
-            "html" => $html
-        ];
+            $response = [
+                "title" => $module->title,
+                "description" => $module->description,
+                "parent_module_id" => $module->parent_module_id,
+                "html" => $html
+            ];
+        } else {
+            $response = [
+                "title" => 'None',
+                "description" => '',
+                "parent_module_id" => 0,
+                "html" => $html
+            ];
+        }
 
         return json_encode($response);
     }

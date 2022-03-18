@@ -16,6 +16,7 @@
             {{ Form::hidden('version_id', $project_version->id, ['id' => 'version_id']) }}
             {{ Form::hidden('current_module_title', '', ['id' => 'current_module_title']) }}
             {{ Form::hidden('current_module_desc', '', ['id' => 'current_module_desc']) }}
+            {{ Form::hidden('current_module_parent_id', '', ['id' => 'current_module_parent_id']) }}
 
             <div class="row">
                 <div class="col-md-3">
@@ -23,11 +24,13 @@
                         <div class="card-header bg-transparent">
                             <div class="row">
                                 <div class="col-md-6"><h3>Modules</h3></div>
-                                <div class="col-md-6"></div>
+                                <div class="col-md-6">
+                                    <a href="#" onclick="modules_back_button()" class="btn btn-outline-dark btn-rounded btn-sm">Back</a>
+                                    <a href="#" class="btn btn-outline-success btn-rounded btn-sm" data-toggle="modal" data-target="#module_form">Add Module</a>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body" id="modules_div">
-                            <a href="#" class="btn btn-outline-success btn-rounded" data-toggle="modal" data-target="#module_form">Add Module</a><hr>
 
                             @if(count($modules) > 0)
                                 @foreach($modules as $module)
@@ -48,7 +51,6 @@
                                 <div class="col-md-8">
                                     <a href="#" class="btn btn-outline-primary btn-rounded" onclick="edit_module()">Edit Module</a>
                                     <a href="#" class="btn btn-outline-warning btn-rounded" onclick="archive_module()">Archive Module</a>
-                                    <a href="#" class="btn btn-outline-danger btn-rounded">Delete Module</a>
                                     <a href="#" class="btn btn-outline-success btn-rounded" onclick="add_feature()">Add Feature To Module</a>
                                 </div>
                             </div>
@@ -179,6 +181,7 @@
                     $('#parent_module_text').val(decoded_json.title);
                     $('#current_module_title').val(decoded_json.title);
                     $('#current_module_desc').val(decoded_json.description);
+                    $('#current_module_parent_id').val(decoded_json.parent_module_id);
 
                     update_modules_list();
                 }
@@ -230,6 +233,12 @@
             } else {
                 window.location.href = '/project_version_features/create_feature/' + parent_module_id;
             }
+        }
+
+        function modules_back_button() {
+            let parent_module_id = $('#current_module_parent_id').val();
+
+            select_module(parent_module_id);
         }
     </script>
 @endpush

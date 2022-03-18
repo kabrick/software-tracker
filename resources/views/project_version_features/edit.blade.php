@@ -27,7 +27,7 @@
                     {{ Form::open(['route' => 'project_version_features.update', 'data-toggle' => 'validator', 'enctype' => 'multipart/form-data']) }}
 
                     {{ Form::hidden('version_id', $feature->version_id) }}
-                    {{ Form::hidden('parent_id', $feature->parent_version_id) }}
+                    {{ Form::hidden('module_id', $feature->module_id) }}
                     {{ Form::hidden('id', $feature->id) }}
 
                     <div class="form-group">

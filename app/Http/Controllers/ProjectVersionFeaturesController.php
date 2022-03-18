@@ -12,6 +12,74 @@ use Illuminate\Support\Facades\DB;
 
 class ProjectVersionFeaturesController extends Controller {
 
+    public function view_features($version_id) {
+        $chunked_features = ProjectVersionFeature::where('project_version_features.version_id', $version_id)
+            ->leftJoin('users', function ($join) {
+                $join->on('users.id', '=', 'project_version_features.created_by')
+                    ->orOn('users.id', '=', 'project_version_features.updated_by');
+            })
+            ->leftJoin('project_version_modules', 'project_version_modules.id', '=', 'project_version_features.module_id')
+            ->orderBy('project_version_features.updated_at', 'desc')
+            ->get(['project_version_features.id', 'project_version_features.title', 'project_version_features.is_published',
+                'users.name as username', 'project_version_features.updated_at', 'project_version_modules.title as module_title'])
+            ->chunk(4);
+
+        $users = DB::table('users')->whereNull('deleted_at')->pluck('name', 'id')->toArray();
+        $users = [0 => "--select--"] + $users;
+
+        $modules = DB::table('project_version_modules')->whereNull('deleted_at')->pluck('title', 'id')->toArray();
+        $modules = [0 => "--select--"] + $modules;
+
+        return view('project_version_features.view_features', compact('version_id', 'chunked_features', 'users', 'modules'));
+    }
+
+    public function search_features(Request $request) {
+        $version_id = $request->version_id;
+        $filters = [];
+
+        if ($request->user_id) {
+            $filters[] = ['project_version_features.created_by', '=', $request->user_id];
+        }
+
+        if ($request->module_id) {
+            $filters[] = ['project_version_features.module_id', '=', $request->module_id];
+        }
+
+        if ($request->date_search == 0) {
+            $filters[] = ['project_version_features.created_at', '>', now()->startOfDay()];
+            $filters[] = ['project_version_features.created_at', '<', now()->endOfDay()];
+        } elseif ($request->date_search == 1) {
+            $filters[] = ['project_version_features.created_at', '>', Carbon::yesterday()->startOfDay()];
+            $filters[] = ['project_version_features.created_at', '<', Carbon::yesterday()->endOfDay()];
+        } elseif ($request->date_search == 2) {
+            $filters[] = ['project_version_features.created_at', '>', Carbon::parse($request->on_date)->startOfDay()];
+            $filters[] = ['project_version_features.created_at', '<', Carbon::parse($request->on_date)->endOfDay()];
+        } elseif ($request->date_search == 3) {
+            $filters[] = ['project_version_features.created_at', '>', Carbon::parse($request->start_date)->startOfDay()];
+            $filters[] = ['project_version_features.created_at', '<', Carbon::parse($request->end_date)->endOfDay()];
+        }
+
+        $chunked_features = ProjectVersionFeature::where('project_version_features.version_id', $version_id)
+            ->where($filters)
+            ->leftJoin('users', function ($join) {
+                $join->on('users.id', '=', 'project_version_features.created_by')
+                    ->orOn('users.id', '=', 'project_version_features.updated_by');
+            })
+            ->leftJoin('project_version_modules', 'project_version_modules.id', '=', 'project_version_features.module_id')
+            ->orderBy('project_version_features.updated_at', 'desc')
+            ->get(['project_version_features.id', 'project_version_features.title', 'project_version_features.is_published',
+                'users.name as username', 'project_version_features.updated_at', 'project_version_modules.title as module_title'])
+            ->chunk(4);
+
+        $users = DB::table('users')->whereNull('deleted_at')->pluck('name', 'id')->toArray();
+        $users = [0 => "--select--"] + $users;
+
+        $modules = DB::table('project_version_modules')->whereNull('deleted_at')->pluck('title', 'id')->toArray();
+        $modules = [0 => "--select--"] + $modules;
+
+        return view('project_version_features.view_features', compact('version_id', 'chunked_features', 'users', 'modules'));
+    }
+
     public function create_feature($parent_id) {
         $version_id = get_name($parent_id, 'id', 'version_id', 'project_version_modules');
 
@@ -39,12 +107,7 @@ class ProjectVersionFeaturesController extends Controller {
     public function feature_details($id) {
         $feature = ProjectVersionFeature::find($id);
 
-        $child_features = DB::table('project_version_features')
-            ->where('parent_version_id', $id)
-            ->whereNull('deleted_at')
-            ->get(['id', 'title']);
-
-        return view('project_version_features.feature_details', compact('id', 'feature', 'child_features'));
+        return view('project_version_features.feature_details', compact('id', 'feature'));
     }
 
     public function archive($id) {
@@ -105,7 +168,7 @@ class ProjectVersionFeaturesController extends Controller {
 
         $feature = ProjectVersionFeature::find($id);
         $feature->version_id = $request->version_id;
-        $feature->parent_version_id = $request->parent_id;
+        $feature->module_id = $request->module_id;
         $feature->title = $request->title;
         $feature->description = $request->description;
         $feature->updated_by = Auth::user()->id;
