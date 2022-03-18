@@ -26,7 +26,8 @@
                             <a href="/project_version_features/archive/{{ $feature->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this feature')">Archive</a>
                         </div>
                         <div class="col-md-3">
-                            <a href="/project_version_features/delete/{{ $feature->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this feature')">Delete</a>
+                            {{--<a href="/project_version_features/delete/{{ $feature->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this feature')">Delete</a>--}}
+                            <a href="/project_version_features/generate_feature_pdf/{{ $feature->id }}/" target="_blank" class="btn btn-outline-info btn-rounded col-md-12">Print Feature</a>
                         </div>
                         <div class="col-md-3">
                             <a href="/project_version_features/edit/{{ $feature->id }}" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>

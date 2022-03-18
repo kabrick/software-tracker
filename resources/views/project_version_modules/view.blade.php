@@ -52,6 +52,7 @@
                                     <a href="#" class="btn btn-outline-primary btn-rounded" onclick="edit_module()">Edit Module</a>
                                     <a href="#" class="btn btn-outline-warning btn-rounded" onclick="archive_module()">Archive Module</a>
                                     <a href="#" class="btn btn-outline-success btn-rounded" onclick="add_feature()">Add Feature To Module</a>
+                                    <a href="#" class="btn btn-outline-info btn-rounded" onclick="print_module()">Print Module</a>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +230,7 @@
             let parent_module_id = $('#parent_module_id').val();
 
             if (parent_module_id == '0') {
-                alert("Please select a module to archive");
+                alert("Please select a module to add a feature to");
             } else {
                 window.location.href = '/project_version_features/create_feature/' + parent_module_id;
             }
@@ -239,6 +240,16 @@
             let parent_module_id = $('#current_module_parent_id').val();
 
             select_module(parent_module_id);
+        }
+
+        function print_module() {
+            let parent_module_id = $('#parent_module_id').val();
+
+            if (parent_module_id == '0') {
+                alert("Please select a module to print");
+            } else {
+                window.open('/project_version_modules/print_module/' + parent_module_id, '_blank');
+            }
         }
     </script>
 @endpush

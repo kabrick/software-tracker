@@ -41,6 +41,8 @@
                                     <a href="/project_versions/delete_version/{{ $project_version->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this project version?')">Delete</a>
                                 </div>
                             </div>
+                            <hr>
+                            <a href="/project_version_modules/generate_manual/{{ $project_version->id }}" target="_blank" class="btn btn-outline-info btn-rounded col-md-12">Print Manual</a>
                         </div>
                     </div>
 
@@ -50,7 +52,7 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <a class="btn-icon-clipboard" title="Add New Guide" href="/project_version_modules/view/{{ $project_version->id }}">
+                            <a class="btn-icon-clipboard" title="View Modules" href="/project_version_modules/view/{{ $project_version->id }}">
                                 <div>
                                     <i class="ni ni-fat-add"></i>
                                     <span>

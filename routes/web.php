@@ -75,7 +75,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_version_features/publish/{id}', ['uses' => 'ProjectVersionFeaturesController@publish']);
     Route::any('project_version_features/unpublish/{id}', ['uses' => 'ProjectVersionFeaturesController@unpublish']);
     Route::any('project_version_features/update', ['as' => 'project_version_features.update', 'uses' => 'ProjectVersionFeaturesController@update']);
-    Route::any('project_version_features/share_pdf/{version_id}', ['uses' => 'ProjectVersionFeaturesController@share_pdf']);
+    Route::any('project_version_features/generate_feature_pdf/{feature_id}', ['uses' => 'ProjectVersionFeaturesController@generate_feature_pdf']);
 
     // Project Version Modules
     Route::any('project_version_modules/view/{project_version_id}', ['uses' => 'ProjectVersionModuleController@view']);
@@ -84,5 +84,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_version_modules/fetch_modules/{parent_module_id}', ['uses' => 'ProjectVersionModuleController@fetch_modules']);
     Route::any('project_version_modules/fetch_module_details/{module_id}', ['uses' => 'ProjectVersionModuleController@fetch_module_details']);
     Route::any('project_version_modules/archive/{module_id}', ['uses' => 'ProjectVersionModuleController@archive']);
+    Route::any('project_version_modules/generate_manual/{version_id}', ['uses' => 'ProjectVersionModuleController@generate_manual']);
+    Route::any('project_version_modules/print_module/{module_id}', ['uses' => 'ProjectVersionModuleController@print_module']);
 });
 

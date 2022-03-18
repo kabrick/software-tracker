@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\ProjectVersion;
 use App\Models\ProjectVersionModule;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProjectVersionModuleController extends Controller {
 
@@ -92,5 +94,110 @@ class ProjectVersionModuleController extends Controller {
         } else {
             return "error";
         }
+    }
+
+    public function generate_manual($version_id) {
+        $html = "";
+
+        $modules = DB::table('project_version_modules')
+            ->where('version_id', $version_id)
+            ->where('parent_module_id', 0)
+            ->whereNull('deleted_at')
+            ->get(['id', 'title', 'description']);
+
+        $top_level = 1;
+
+        foreach ($modules as $module) {
+            $html .= "<h1 style='color: maroon'>$top_level   $module->title</h1>";
+            $html .= "<hr style='border-top: 2px dashed orange;'>";
+            $html .= "<br>$module->description<br><br>";
+            $html .= "<hr style='border-top: 2px dashed orange;'>";
+            $html .= $this->get_module_features($module->id);
+            $html .= $this->get_child_modules($module->id, $top_level);
+
+            $top_level++;
+        }
+
+        $title = get_name(get_name($version_id, 'id', 'project_id', 'project_versions'), 'id', 'name', 'projects');
+
+        $data = [
+            'html' => $html,
+            'title' => $title
+        ];
+
+        $pdf = SnappyPDF::loadView('project_version_modules/generate_manual', $data)
+            ->setOrientation('portrait')
+            ->setOption('margin-bottom', 7)
+            ->setOption('margin-top', 5)
+            ->setOption('footer-html', '<i>' . $title . '</i>');
+
+        return $pdf->inline($title . '.pdf');
+    }
+
+    public function get_child_modules($module_id, $current_level): string {
+        $modules = DB::table('project_version_modules')
+            ->where('parent_module_id', $module_id)
+            ->whereNull('deleted_at')
+            ->get(['id', 'title', 'description']);
+
+        $sub_level = 1;
+        $return_html = "";
+
+        foreach ($modules as $module) {
+            $return_html .= "<h1 style='color: maroon'>$current_level.$sub_level   $module->title</h1>";
+            $return_html .= "<hr style='border-top: 2px dashed orange;'>";
+            $return_html .= "<br>$module->description<br><br>";
+            $return_html .= "<hr style='border-top: 2px dashed orange;'>";
+            $return_html .= $this->get_module_features($module->id);
+            $return_html .= $this->get_child_modules($module->id, $current_level . "." . $sub_level);
+
+            $sub_level++;
+        }
+
+        return $return_html;
+    }
+
+    public function get_module_features($module_id): string {
+        $features = DB::table('project_version_features')
+            ->where('module_id', $module_id)
+            ->whereNull('deleted_at')
+            ->get(['id', 'title', 'description']);
+
+        $return_html = "";
+
+        foreach ($features as $feature) {
+            $return_html .= "<h2>$feature->title</h2>";
+            $return_html .= "$feature->description<br><br>";
+        }
+
+        return $return_html;
+    }
+
+    public function print_module($module_id) {
+        $html = "";
+
+        $module = ProjectVersionModule::find($module_id);
+
+        $html .= "<h1 style='color: maroon'>1   $module->title</h1>";
+        $html .= "<hr style='border-top: 2px dashed orange;'>";
+        $html .= "<br>$module->description<br><br>";
+        $html .= "<hr style='border-top: 2px dashed orange;'>";
+        $html .= $this->get_module_features($module->id);
+        $html .= $this->get_child_modules($module->id, 1);
+
+        $title = $module->title;
+
+        $data = [
+            'html' => $html,
+            'title' => $title
+        ];
+
+        $pdf = SnappyPDF::loadView('project_version_modules/generate_manual', $data)
+            ->setOrientation('portrait')
+            ->setOption('margin-bottom', 7)
+            ->setOption('margin-top', 5)
+            ->setOption('footer-html', '<i>' . $title . '</i>');
+
+        return $pdf->inline($title . '.pdf');
     }
 }

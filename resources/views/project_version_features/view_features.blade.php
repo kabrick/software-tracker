@@ -112,12 +112,6 @@
                             @endforeach
                         </div>
                     @endforeach
-
-                    {{--<div class="row">
-                        <div class="col-md-4">
-                            <a href="/project_version_features/share_pdf/{{ $version_id }}" target="_blank" class="btn btn-outline-primary btn-rounded col-md-12">Share PDF</a>
-                        </div>
-                    </div>--}}
                 </div>
             </div>
         </div>

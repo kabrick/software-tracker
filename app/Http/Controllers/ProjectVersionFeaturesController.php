@@ -207,34 +207,21 @@ class ProjectVersionFeaturesController extends Controller {
         return redirect('project_version_features/feature_details/' . $id);
     }
 
-    public function share_pdf($id) {
-        $features = DB::table('project_version_features')
-            ->where('version_id', $id)
-            ->where('parent_version_id', 0)
-            ->whereNull('deleted_at')
-            ->get(['id', 'title', 'description']);
+    public function generate_feature_pdf($feature_id) {
+        $feature = ProjectVersionFeature::find($feature_id);
 
-        $html = "";
+        $title = $feature->title;
 
-        $top_level = 1;
-
-        foreach($features as $feature) {
-            $html .= "<h3>$top_level   $feature->title</h3>";
-            $html .= "<br>$feature->description<br><br>";
-            $html .= "<hr>";
-
-            $top_level++;
-        }
-
-        $title = get_name(get_name($id, 'id', 'project_id', 'project_versions'), 'id', 'name', 'projects');
+        $html = "<h3>$feature->title</h3>";
+        $html .= "<br>$feature->description<br><br>";
+        $html .= "<hr>";
 
         $data = [
-            'features' => $features,
             'html' => $html,
             'title' => $title
         ];
 
-        $pdf = SnappyPDF::loadView('project_version_features/share_pdf', $data)
+        $pdf = SnappyPDF::loadView('project_version_features/generate_feature_pdf', $data)
             ->setOrientation('portrait')
             ->setOption('margin-bottom', 7)
             ->setOption('margin-top', 5)
