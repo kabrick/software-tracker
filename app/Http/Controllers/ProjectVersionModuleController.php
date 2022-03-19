@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProjectVersion;
+use App\Models\ProjectVersionFeature;
 use App\Models\ProjectVersionModule;
 use Barryvdh\Snappy\Facades\SnappyPdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -66,6 +68,27 @@ class ProjectVersionModuleController extends Controller {
 
         if ($module) {
             $html .= "<h4>Description</h4><p>" . $module->description . "</p>";
+
+            $chunked_features = ProjectVersionFeature::where('module_id', $module_id)
+                ->leftJoin('users', function ($join) {
+                    $join->on('users.id', '=', 'project_version_features.created_by')
+                        ->orOn('users.id', '=', 'project_version_features.updated_by');
+                })
+                ->orderBy('project_version_features.updated_at', 'desc')
+                ->get(['project_version_features.id', 'project_version_features.title', 'project_version_features.is_published',
+                    'users.name', 'project_version_features.updated_at'])->chunk(3);
+
+            foreach ($chunked_features as $features) {
+                $html .= '<div class="row">';
+                foreach ($features as $feature) {
+                    $html .= '<div class="col-md-4">';
+                    $html .= '<a class="btn-icon-clipboard" title="' . $feature->title . '" href="/project_version_features/feature_details/' . $feature->id . '">';
+                    $html .= '<div><i class="ni ni-folder-17"></i><div style="margin-left: 10px"><h3>' . $feature->title . '</h3>';
+                    $html .= '<p>Last updated By ' . $feature->name . Carbon::parse($feature->updated_at)->fromNow() . '</p>';
+                    $html .= '</div></div></a></div>';
+                }
+                $html .= '</div>';
+            }
 
             $response = [
                 "title" => $module->title,

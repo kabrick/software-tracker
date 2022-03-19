@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProjectVersionFeature;
-use App\Models\ProjectVersionGuide;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
