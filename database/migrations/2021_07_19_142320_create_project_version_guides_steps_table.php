@@ -13,7 +13,7 @@ class CreateProjectVersionGuidesStepsTable extends Migration {
     public function up() {
         Schema::create('project_version_guides_steps', function (Blueprint $table) {
             $table->id();
-            $table->integer("guide_id");
+            $table->integer("feature_id");
             $table->text("description");
             $table->text("images");
             $table->integer('created_by');
