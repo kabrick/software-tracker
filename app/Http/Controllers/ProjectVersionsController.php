@@ -60,10 +60,7 @@ class ProjectVersionsController extends Controller {
         $project_version = ProjectVersion::find($id);
 
         $project_features = ProjectVersionFeature::where('version_id', $id)
-            ->leftJoin('users', function ($join) {
-                $join->on('users.id', '=', 'project_version_features.created_by')
-                    ->orOn('users.id', '=', 'project_version_features.updated_by');
-            })
+            ->leftJoin('users', 'users.id', '=', 'project_version_features.updated_by')
             ->limit(7)
             ->orderBy('project_version_features.updated_at', 'desc')
             ->get(['project_version_features.id', 'project_version_features.title', 'project_version_features.is_published',
@@ -258,6 +255,7 @@ class ProjectVersionsController extends Controller {
         $new_feature->parent_version_id = $parent_version_id;
         $new_feature->is_published = $old_feature->is_published;
         $new_feature->created_by = Auth::user()->id;
+        $new_feature->updated_by = Auth::user()->id;
         $new_feature->save();
 
         $project_version_features = DB::table('project_version_features')

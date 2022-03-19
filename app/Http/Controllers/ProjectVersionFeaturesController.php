@@ -13,10 +13,7 @@ class ProjectVersionFeaturesController extends Controller {
 
     public function view_features($version_id) {
         $chunked_features = ProjectVersionFeature::where('project_version_features.version_id', $version_id)
-            ->leftJoin('users', function ($join) {
-                $join->on('users.id', '=', 'project_version_features.created_by')
-                    ->orOn('users.id', '=', 'project_version_features.updated_by');
-            })
+            ->leftJoin('users', 'users.id', '=', 'project_version_features.updated_by')
             ->leftJoin('project_version_modules', 'project_version_modules.id', '=', 'project_version_features.module_id')
             ->orderBy('project_version_features.updated_at', 'desc')
             ->get(['project_version_features.id', 'project_version_features.title', 'project_version_features.is_published',
@@ -60,10 +57,7 @@ class ProjectVersionFeaturesController extends Controller {
 
         $chunked_features = ProjectVersionFeature::where('project_version_features.version_id', $version_id)
             ->where($filters)
-            ->leftJoin('users', function ($join) {
-                $join->on('users.id', '=', 'project_version_features.created_by')
-                    ->orOn('users.id', '=', 'project_version_features.updated_by');
-            })
+            ->leftJoin('users', 'users.id', '=', 'project_version_features.updated_by')
             ->leftJoin('project_version_modules', 'project_version_modules.id', '=', 'project_version_features.module_id')
             ->orderBy('project_version_features.updated_at', 'desc')
             ->get(['project_version_features.id', 'project_version_features.title', 'project_version_features.is_published',
@@ -96,6 +90,7 @@ class ProjectVersionFeaturesController extends Controller {
         $feature->title = $request->title;
         $feature->description = $request->description;
         $feature->created_by = Auth::user()->id;
+        $feature->updated_by = Auth::user()->id;
 
         $feature->save();
 

@@ -27,6 +27,7 @@ class ProjectVersionModuleController extends Controller {
         $module->description = $request->description;
         $module->title = $request->title;
         $module->created_by = auth()->id();
+        $module->updated_by = auth()->id();
 
         if ($module->save()) {
             return 1;
@@ -54,8 +55,12 @@ class ProjectVersionModuleController extends Controller {
 
         $modules = ProjectVersionModule::where('parent_module_id', $parent_module_id)->get();
 
-        foreach ($modules as $module) {
-            $html .= "<a href='#' onclick='select_module(\"" . $module->id . "\")'>" . $module->title . "</a><br><br>";
+        if (count($modules) > 0) {
+            foreach ($modules as $module) {
+                $html .= "<a href='#' onclick='select_module(\"" . $module->id . "\")'>" . $module->title . "</a><br><br>";
+            }
+        } else {
+            $html .= "<div class='text-center'><code>No modules available</code></div>";
         }
 
         return $html;
@@ -70,10 +75,7 @@ class ProjectVersionModuleController extends Controller {
             $html .= "<h4>Description</h4><p>" . $module->description . "</p>";
 
             $chunked_features = ProjectVersionFeature::where('module_id', $module_id)
-                ->leftJoin('users', function ($join) {
-                    $join->on('users.id', '=', 'project_version_features.created_by')
-                        ->orOn('users.id', '=', 'project_version_features.updated_by');
-                })
+                ->leftJoin('users', 'users.id', '=', 'project_version_features.updated_by')
                 ->orderBy('project_version_features.updated_at', 'desc')
                 ->get(['project_version_features.id', 'project_version_features.title', 'project_version_features.is_published',
                     'users.name', 'project_version_features.updated_at'])->chunk(3);
@@ -182,6 +184,7 @@ class ProjectVersionModuleController extends Controller {
 
     public function get_module_features($module_id): string {
         $features = DB::table('project_version_features')
+            ->where('is_published', 1)
             ->where('module_id', $module_id)
             ->whereNull('deleted_at')
             ->get(['id', 'title', 'description']);
