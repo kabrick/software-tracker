@@ -15,7 +15,7 @@ class ProjectVersionModuleController extends Controller {
     public function view($project_version_id) {
         $project_version = ProjectVersion::find($project_version_id);
 
-        $modules = ProjectVersionModule::where('parent_module_id', 0)->orderBy('print_order')->get();
+        $modules = ProjectVersionModule::where('version_id', $project_version_id)->where('parent_module_id', 0)->orderBy('print_order')->get();
 
         return view('project_version_modules.view', compact('project_version', 'modules'));
     }

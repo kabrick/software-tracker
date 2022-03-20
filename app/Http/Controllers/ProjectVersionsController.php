@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ProjectVersion;
 use App\Models\ProjectVersionFeature;
-use App\Models\ProjectVersionGuide;
 use App\Models\ProjectVersionGuidesStep;
+use App\Models\ProjectVersionModule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -166,39 +166,12 @@ class ProjectVersionsController extends Controller {
 
         $new_project_version_id = $new_project_version->id;
 
-        // create new project guides
-        $project_version_guides = DB::table('project_version_guides')
-            ->where('version_id', $id)->get();
-
-        foreach ($project_version_guides as $guide) {
-            $new_guide = new ProjectVersionGuide();
-            $new_guide->version_id = $new_project_version_id;
-            $new_guide->title = $guide->title;
-            $new_guide->description = $guide->description;
-            $new_guide->created_by = $logged_in;
-            $new_guide->save();
-
-            $new_guide_id = $new_guide->id;
-
-            $guide_steps = DB::table('project_version_guides_steps')
-                ->where('guide_id', $guide->id)->get();
-
-            foreach ($guide_steps as $step) {
-                $new_step = new ProjectVersionGuidesStep();
-                $new_step->guide_id = $new_guide_id;
-                $new_step->images = $step->images;
-                $new_step->description = $step->description;
-                $new_step->created_by = $logged_in;
-                $new_step->save();
-            }
-        }
-
         // create new project features
-        $project_version_features = DB::table('project_version_features')
-            ->where('version_id', $id)->where('parent_version_id', 0)->get();
+        $project_version_modules = DB::table('project_version_modules')
+            ->where('version_id', $id)->where('parent_module_id', 0)->get(['id']);
 
-        foreach ($project_version_features as $feature) {
-            $this->create_new_feature($feature->id, $new_project_version_id, 0);
+        foreach ($project_version_modules as $module) {
+            $this->create_new_module($module->id, $new_project_version_id, 0, $logged_in);
         }
 
         flash("Project version has been cloned successfully")->success();
@@ -206,24 +179,63 @@ class ProjectVersionsController extends Controller {
     }
 
     // recursive function to view child features
-    public function create_new_feature($feature_id, $version_id, $parent_version_id) {
-        $old_feature = ProjectVersionFeature::find($feature_id);
+    public function create_new_module($module_id, $version_id, $parent_module_id, $logged_in) {
+        $old_module = ProjectVersionModule::withTrashed()->find($module_id);
 
-        $new_feature = new ProjectVersionFeature();
-        $new_feature->version_id = $version_id;
-        $new_feature->title = $old_feature->title;
-        $new_feature->description = $old_feature->description;
-        $new_feature->parent_version_id = $parent_version_id;
-        $new_feature->is_published = $old_feature->is_published;
-        $new_feature->created_by = Auth::user()->id;
-        $new_feature->updated_by = Auth::user()->id;
-        $new_feature->save();
+        $new_module_id = DB::table('project_version_modules')->insertGetId([
+            "version_id" => $version_id,
+            "title" => $old_module->title,
+            "description" => $old_module->description,
+            "parent_module_id" => $parent_module_id,
+            "print_order" => $old_module->print_order,
+            "created_by" => $logged_in,
+            "updated_by" => $logged_in,
+            "created_at" => now(),
+            "updated_at" => now()
+        ]);
 
+        // create new project guides
         $project_version_features = DB::table('project_version_features')
-            ->where('parent_version_id', $feature_id)->get();
+            ->where('module_id', $module_id)->get();
 
         foreach ($project_version_features as $feature) {
-            $this->create_new_feature($feature->id, $version_id, $new_feature->id);
+            $new_feature_id = DB::table('project_version_features')->insertGetId([
+                "version_id" => $version_id,
+                "title" => $feature->title,
+                "description" => $feature->description,
+                "module_id" => $new_module_id,
+                "is_published" => $feature->is_published,
+                "print_order" => $feature->print_order,
+                "type" => $feature->type,
+                "created_by" => $logged_in,
+                "updated_by" => $logged_in,
+                "created_at" => now(),
+                "updated_at" => now()
+            ]);
+
+            if ($feature->type == 1) {
+                $guide_steps = DB::table('project_version_guides_steps')
+                    ->where('feature_id', $feature->id)->get();
+
+                foreach ($guide_steps as $step) {
+                    DB::table('project_version_guides_steps')->insert([
+                        "feature_id" => $new_feature_id,
+                        "description" => $step->description,
+                        "images" => $step->images,
+                        "created_by" => $logged_in,
+                        "updated_by" => $logged_in,
+                        "created_at" => now(),
+                        "updated_at" => now()
+                    ]);
+                }
+            }
+        }
+
+        $project_version_modules = DB::table('project_version_modules')
+            ->where('parent_module_id', $module_id)->get(['id']);
+
+        foreach ($project_version_modules as $module) {
+            $this->create_new_module($module->id, $version_id, $new_module_id, $logged_in);
         }
     }
 }
