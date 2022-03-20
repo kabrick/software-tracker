@@ -6,39 +6,45 @@
         <div class=" col "><nav aria-label="breadcrumb" class="d-none d-md-inline-block">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
-                    <li class="breadcrumb-item"><a href="/projects/{{ get_name($guide->version_id, 'id', 'project_id', 'project_versions') }}">{{ get_name(get_name($guide->version_id, 'id', 'project_id', 'project_versions'), 'id', 'name', 'projects') }}</a></li>
-                    <li class="breadcrumb-item"><a href="/project_versions/{{ $guide->version_id }}">{{ get_name($guide->version_id, 'id', 'name', 'project_versions') }}</a></li>
+                    <li class="breadcrumb-item"><a href="/projects/{{ get_name($feature->version_id, 'id', 'project_id', 'project_versions') }}">{{ get_name(get_name($feature->version_id, 'id', 'project_id', 'project_versions'), 'id', 'name', 'projects') }}</a></li>
+                    <li class="breadcrumb-item"><a href="/project_versions/{{ $feature->version_id }}">{{ get_name($feature->version_id, 'id', 'name', 'project_versions') }}</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Update Project Version Guide</li>
                 </ol>
             </nav>
 
             <div class="card">
                 <div class="card-header bg-transparent">
-                    <h3 class="mb-0">Update Project Version Guide</h3>
+                    <h3 class="mb-0">Edit Project Version Features</h3>
                 </div>
                 <div class="card-body">
                     {{ Form::open(['route' => 'project_versions.update_guide', 'data-toggle' => 'validator', 'enctype' => 'multipart/form-data']) }}
 
-                    {{ Form::hidden('guide_id', $guide->id) }}
+                    {{ Form::hidden('feature_id', $feature->id) }}
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label>Guide Title</label>
-                                {{ Form::text('title', $guide->title, ['class' => 'form-control compulsory', 'required']) }}
+                                <label>Parent Module</label>
+                                {{ Form::text('parent_module', get_name($feature->module_id, 'id', 'title', 'project_version_modules'), ['class' => 'form-control', 'readonly']) }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Feature Title</label>
+                                {{ Form::text('title', $feature->title, ['class' => 'form-control', 'required']) }}
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Guide Description</label>
-                                <textarea name="description" class="form-control compulsory" required>{{ $guide->description }}</textarea>
+                                <label>Feature Description</label>
+                                <textarea name="description" class="form-control" required>{{ $feature->description }}</textarea>
                             </div>
                         </div>
                     </div>
 
                     <div class='input_fields_wrap'>
-                        @php $steps = $guide->steps()->get(); $counter = 1; @endphp
+                        @php $steps = $feature->steps()->get(); $counter = 1; @endphp
 
                         @foreach($steps as $step)
                             {{ Form::hidden('original_step_ids[]', $step->id) }}
@@ -61,7 +67,7 @@
 
                                         <div class='form-group'>
                                             <label>Step Description</label>
-                                            <textarea name='step_description[]' class='form-control compulsory' required rows="7">{{ $step->description }}</textarea>
+                                            <textarea name='step_description[]' class='form-control' required rows="7">{{ $step->description }}</textarea>
                                         </div>
 
                                         @if($counter > 1)
@@ -104,7 +110,7 @@
                 <input type='hidden' value='0' name='step_id[]'/> \
             <div class='row'>\
                     <div class='col-md-6'>\
-                    <img src='http://placehold.jp/600x250.png' width='600' height='250' alt='image' id='image_preview" + x + "'>\
+                    <img src='<?php echo asset('assets/img/brand/600x250.png'); ?>' width='600' height='250' alt='image' id='image_preview" + x + "'>\
                     <br><br>\
                     <div class='custom-file'>\
                     <input type='file' name='step_image[]' class='custom-file-input chosen_image' id='" + x + "' onchange='preview_image(this)' required>\
@@ -115,7 +121,7 @@
             <h3>Step " + x + "</h3>\
             <div class='form-group'>\
             <label>Step Description</label>\
-            <textarea name='step_description[]' class='form-control compulsory' required rows='7'></textarea>\
+            <textarea name='step_description[]' class='form-control' required rows='7'></textarea>\
             </div>\
             <a class='remove_field btn btn-danger btn-rounded btn-sm text-white'><i class='fa fa-trash'></i> Remove Step</a>\
             </div>\

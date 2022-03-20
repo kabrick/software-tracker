@@ -90,6 +90,8 @@ class ProjectVersionFeaturesController extends Controller {
         $feature->module_id = $request->module_id;
         $feature->title = $request->title;
         $feature->description = $request->description;
+        $feature->print_order = 0;
+        $feature->type = 0;
         $feature->created_by = Auth::user()->id;
         $feature->updated_by = Auth::user()->id;
 
@@ -210,6 +212,19 @@ class ProjectVersionFeaturesController extends Controller {
         $html = "<h3>$feature->title</h3>";
         $html .= "<br>$feature->description<br><br>";
         $html .= "<hr>";
+
+        if ($feature->type == 1) {
+            $steps = $feature->steps()->get(); $counter = 1;
+            $html .= "<br><br>";
+
+            foreach($steps as $step) {
+                $html .= "<h3>Step " . $counter . "</h3><p>" . $step->description . "</p>";
+                $html .= "<img src='" . asset($step->images) . "' width='600' height='250' alt='image'>";
+                $html .= "<br><br>";
+
+                $counter++;
+            }
+        }
 
         $data = [
             'html' => $html,

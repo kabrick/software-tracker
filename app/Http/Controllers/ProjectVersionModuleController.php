@@ -26,6 +26,7 @@ class ProjectVersionModuleController extends Controller {
         $module->version_id = $request->version_id;
         $module->description = $request->description;
         $module->title = $request->title;
+        $module->print_order = 0;
         $module->created_by = auth()->id();
         $module->updated_by = auth()->id();
 
@@ -185,18 +186,30 @@ class ProjectVersionModuleController extends Controller {
     }
 
     public function get_module_features($module_id): string {
-        $features = DB::table('project_version_features')
-            ->where('is_published', 1)
+        $features = ProjectVersionFeature::where('is_published', 1)
             ->where('module_id', $module_id)
             ->whereNull('deleted_at')
             ->orderBy('print_order')
-            ->get(['id', 'title', 'description']);
+            ->get();
 
         $return_html = "";
 
         foreach ($features as $feature) {
             $return_html .= "<h2>$feature->title</h2>";
-            $return_html .= "$feature->description<br><br>";
+            $return_html .= "$feature->description<br><br><hr>";
+
+            if ($feature->type == 1) {
+                $steps = $feature->steps()->get(); $counter = 1;
+                $return_html .= "<br><br>";
+
+                foreach($steps as $step) {
+                    $return_html .= "<h3>Step " . $counter . "</h3><p>" . $step->description . "</p>";
+                    $return_html .= "<img src='" . asset($step->images) . "' width='600' height='250' alt='image'>";
+                    $return_html .= "<br><br>";
+
+                    $counter++;
+                }
+            }
         }
 
         return $return_html;

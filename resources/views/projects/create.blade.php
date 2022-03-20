@@ -23,14 +23,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Project Name</label>
-                                {{ Form::text('name', '', ['class' => 'form-control compulsory', 'required']) }}
+                                {{ Form::text('name', '', ['class' => 'form-control', 'required']) }}
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Project Description</label>
-                                {{ Form::text('description', '', ['class' => 'form-control compulsory', 'required']) }}
+                                {{ Form::text('description', '', ['class' => 'form-control', 'required']) }}
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>

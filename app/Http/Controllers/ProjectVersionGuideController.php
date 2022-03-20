@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProjectVersionGuide;
+use App\Models\ProjectVersionFeature;
 use App\Models\ProjectVersionGuidesStep;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use Carbon\Carbon;
@@ -13,25 +13,30 @@ use Illuminate\Support\Facades\DB;
 
 class ProjectVersionGuideController extends Controller {
 
-    public function create_guide($version_id) {
-        return view('project_version_guides.create_guide', compact('version_id'));
+    public function create_guide($module_id) {
+        $version_id = get_name($module_id, 'id', 'version_id', 'project_version_features');
+
+        return view('project_version_guides.create_guide', compact('module_id', 'version_id'));
     }
 
     public function store_guide(Request $request) {
-        $guide = new ProjectVersionGuide();
-        $guide->version_id = $request->version_id;
-        $guide->title = $request->title;
-        $guide->description = $request->description;
+        $feature = new ProjectVersionFeature();
+        $feature->version_id = $request->version_id;
+        $feature->module_id = $request->module_id;
+        $feature->title = $request->title;
+        $feature->description = $request->description;
+        $feature->print_order = 0;
+        $feature->type = 1;
 
-        $guide->created_by = Auth::user()->id;
-        $guide->save();
+        $feature->created_by = Auth::user()->id;
+        $feature->save();
 
         $guide_step_description = $request->step_description;
         $guide_step_image = $request->file('step_image');
 
         for ($i = 0; $i < count($guide_step_description); $i++) {
             $step = new ProjectVersionGuidesStep();
-            $step->guide_id = $guide->id;
+            $step->feature_id = $feature->id;
             $step->description = $guide_step_description[$i];
 
             // for the images
@@ -44,28 +49,28 @@ class ProjectVersionGuideController extends Controller {
             $step->save();
         }
 
-        flash("Guide has been created successfully")->success();
-        return redirect('project_versions/publish_guide/' . $guide->id);
+        flash("Feature has been created successfully")->success();
+        return redirect('/project_version_features/feature_details/' . $feature->id);
     }
 
     public function edit_guide($id) {
-        $guide = ProjectVersionGuide::find($id);
+        $feature = ProjectVersionFeature::find($id);
 
-        return view('project_version_guides.edit_guide', compact('guide'));
+        return view('project_version_guides.edit_guide', compact('feature'));
     }
 
     public function update_guide(Request $request) {
         $original_step_ids = $request->original_step_ids;
         $step_ids = $request->step_id;
         $removed_steps = array_diff($original_step_ids, $step_ids);
-        $guide_id = $request->guide_id;
+        $feature_id = $request->feature_id;
 
-        $guide = ProjectVersionGuide::find($guide_id);
-        $guide->title = $request->title;
-        $guide->description = $request->description;
+        $feature = ProjectVersionFeature::find($feature_id);
+        $feature->title = $request->title;
+        $feature->description = $request->description;
 
-        $guide->updated_by = Auth::user()->id;
-        $guide->save();
+        $feature->updated_by = Auth::user()->id;
+        $feature->save();
 
         $guide_step_description = $request->step_description;
         $guide_step_image = $request->file('step_image');
@@ -79,7 +84,7 @@ class ProjectVersionGuideController extends Controller {
                 $step->updated_by = Auth::user()->id;
             }
 
-            $step->guide_id = $guide->id;
+            $step->feature_id = $feature->id;
             $step->description = $guide_step_description[$i];
 
             if (isset($guide_step_image[$i])) {
@@ -99,101 +104,7 @@ class ProjectVersionGuideController extends Controller {
             $project_version_guide_step->forceDelete();
         }
 
-        flash("Guide has been updated successfully")->success();
-        return redirect('project_versions/publish_guide/' . $guide->id);
-    }
-
-    public function publish_guide($id) {
-        $guide = ProjectVersionGuide::find($id);
-
-        $project_versions = DB::table('project_versions')
-            ->whereNull('deleted_at')->whereNotIn('id', [$guide->version_id])->get(['id', 'name']);
-
-        return view('project_version_guides.publish_guide', compact('guide', 'project_versions'));
-    }
-
-    public function archive_guide($id) {
-        $guide = ProjectVersionGuide::find($id);
-
-        if ($guide->delete()) {
-            flash("Project version guide has been archived")->success();
-            return redirect('/project_versions/' . $guide->version_id);
-        } else {
-            flash("An error occurred. Project version guide was not archived")->error();
-            return back()->withInput();
-        }
-    }
-
-    public function delete_guide($id) {
-        $guide = ProjectVersionGuide::find($id);
-
-        if ($guide->forceDelete()) {
-            flash("Project version guide has been deleted")->success();
-            return redirect('/project_versions/' . $guide->version_id);
-        } else {
-            flash("An error occurred. Project version guide was not deleted")->error();
-            return back()->withInput();
-        }
-    }
-
-    public function view_archived_guides() {
-        $guides = ProjectVersionGuide::onlyTrashed()->get();
-
-        return view('project_version_guides.view_archived_guides', compact('guides'));
-    }
-
-    public function restore_guide($id) {
-        $guide = ProjectVersionGuide::withTrashed()->find($id);
-
-        if($guide->restore()){
-            flash("Project version guide has been restored")->success();
-            return redirect('project_versions/publish_guide/' . $guide->id);
-        } else {
-            flash("An error occurred. Project version guide was not restored")->error();
-            return back()->withInput();
-        }
-    }
-
-    public function clone_guide($id, $version_id) {
-        $guide = ProjectVersionGuide::find($id);
-
-        $new_guide = new ProjectVersionGuide();
-        $new_guide->version_id = $version_id;
-        $new_guide->title = $guide->title;
-        $new_guide->description = $guide->description;
-        $new_guide->created_by = Auth::user()->id;
-        $new_guide->save();
-
-        $new_guide_steps = $guide->steps()->get();
-
-        foreach ($new_guide_steps as $guide_step) {
-            $new_guide_steps = new ProjectVersionGuidesStep();
-            $new_guide_steps->guide_id = $new_guide->id;
-            $new_guide_steps->description = $guide_step->description;
-            $new_guide_steps->images = $guide_step->images;
-            $new_guide_steps->created_by = Auth::user()->id;
-            $new_guide_steps->save();
-        }
-
-        return "Guide was successfully cloned to the " . get_name($version_id, 'id', 'name', 'project_versions') . " project version";
-    }
-
-    public function share_guide_pdf($id) {
-        $guide = ProjectVersionGuide::find($id);
-
-        $title = get_name(get_name($guide->version_id, 'id', 'project_id', 'project_versions'), 'id', 'name', 'projects');
-
-        $data = [
-            'guide' => $guide,
-            'title' => $title
-        ];
-
-        $pdf = SnappyPDF::loadView('project_version_guides/share_guide_pdf', $data)
-            ->setOrientation('portrait')
-            ->setOption('margin-bottom', 7)
-            ->setOption('margin-top', 5)
-            ->setOption('footer-html', '<i>' . $title . '</i>');
-
-        return $pdf->inline($title . '-' . $guide->title . '.pdf');
+        flash("Feature has been updated successfully")->success();
+        return redirect('/project_version_features/feature_details/' . $feature->id);
     }
 }

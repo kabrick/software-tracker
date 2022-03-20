@@ -11,7 +11,7 @@ class ProjectVersionGuidesStep extends Model implements Auditable{
     use \OwenIt\Auditing\Auditable;
     use HasFactory;
 
-    public function guide() {
-        return $this->belongsTo(ProjectVersionModule::class, 'module_id');
+    public function feature() {
+        return $this->belongsTo(ProjectVersionFeature::class, 'feature_id');
     }
 }

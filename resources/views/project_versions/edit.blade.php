@@ -24,14 +24,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Version Name</label>
-                                {{ Form::text('name', $project_version->name, ['class' => 'form-control compulsory', 'required']) }}
+                                {{ Form::text('name', $project_version->name, ['class' => 'form-control', 'required']) }}
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Version Description</label>
-                                {{ Form::text('description', $project_version->description, ['class' => 'form-control compulsory', 'required']) }}
+                                {{ Form::text('description', $project_version->description, ['class' => 'form-control', 'required']) }}
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>

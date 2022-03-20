@@ -30,7 +30,11 @@
                             <a href="/project_version_features/generate_feature_pdf/{{ $feature->id }}/" target="_blank" class="btn btn-outline-info btn-rounded col-md-12">Print Feature</a>
                         </div>
                         <div class="col-md-3">
-                            <a href="/project_version_features/edit/{{ $feature->id }}" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
+                            @if($feature->type == 0)
+                                <a href="/project_version_features/edit/{{ $feature->id }}" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
+                            @else
+                                <a href="/project_versions/edit_guide/{{ $feature->id }}" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
+                            @endif
                         </div>
                         <div class="col-md-3">
                             @if($feature->is_published == 0)
@@ -50,6 +54,35 @@
                         </div>
                         <div class="col-md-2"></div>
                     </div>
+
+                    @if($feature->type == 1)
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10">
+                                @php $steps = $feature->steps()->get(); $counter = 1; @endphp
+
+                                @foreach($steps as $step)
+                                    @if($counter > 1) <hr> @endif
+                                    <div class='row'>
+                                        <div class='col-md-6'>
+                                            <img src='{{ $step->images }}' width='600' height='250' alt='image' id='image_preview1' class="modal-image">
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <h3>Step {{ $counter }}</h3>
+
+                                            <p>{{ $step->description }}</p>
+                                        </div>
+                                    </div>
+
+                                    @php $counter++ @endphp
+                                    <br><br>
+                                @endforeach
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Module Description</label>
-                                    {{ Form::text('description', '', ['class' => 'form-control', 'required', 'id' => 'module_desc']) }}
+                                    {{ Form::textarea('description', '', ['class' => 'form-control', 'required', 'id' => 'module_desc']) }}
                                 </div>
                                 <div class="form-group">
                                     <label>Parent Module</label>
@@ -232,7 +232,7 @@
             if (parent_module_id == '0') {
                 alert("Please select a module to add a feature to");
             } else {
-                window.location.href = '/project_version_features/create_feature/' + parent_module_id;
+                window.location.href = '/project_versions/create_guide/' + parent_module_id;
             }
         }
 

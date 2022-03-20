@@ -30,10 +30,20 @@
                     {{ Form::hidden('module_id', $feature->module_id) }}
                     {{ Form::hidden('id', $feature->id) }}
 
-                    <div class="form-group">
-                        <label>Feature Title</label>
-                        {{ Form::text('title', $feature->title, ['class' => 'form-control compulsory', 'required']) }}
-                        <div class="help-block with-errors"></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Parent Module</label>
+                                {{ Form::text('parent_module', get_name($feature->module_id, 'id', 'title', 'project_version_modules'), ['class' => 'form-control', 'readonly']) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Feature Title</label>
+                                {{ Form::text('title', $feature->title, ['class' => 'form-control', 'required']) }}
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
                     </div>
 
                     <hr>
