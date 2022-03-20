@@ -13,6 +13,7 @@ class CreateProjectVersionFeaturesTable extends Migration {
     public function up() {
         Schema::create('project_version_features', function (Blueprint $table) {
             $table->id();
+            $table->integer("version_id")->default(0);
             $table->text("title");
             $table->longText("description");
             $table->integer("module_id")->default(0);

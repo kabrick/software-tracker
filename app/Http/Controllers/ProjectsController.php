@@ -127,7 +127,7 @@ class ProjectsController extends Controller {
 
         if($project->restore()){
             flash("Project has been restored")->success();
-            return redirect('/home/' . $project->id);
+            return redirect('/projects/' . $project->id);
         } else {
             flash("An error occurred. Project was not restored")->error();
             return back()->withInput();

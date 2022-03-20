@@ -86,6 +86,7 @@ class ProjectVersionFeaturesController extends Controller {
         }
 
         $feature = new ProjectVersionFeature();
+        $feature->version_id = get_name($request->module_id, 'id', 'version_id', 'project_version_modules');
         $feature->module_id = $request->module_id;
         $feature->title = $request->title;
         $feature->description = $request->description;
