@@ -42,7 +42,14 @@
                                 </div>
                             </div>
                             <hr>
-                            <a href="/project_version_modules/generate_manual/{{ $project_version->id }}" target="_blank" class="btn btn-outline-info btn-rounded col-md-12">Print Manual</a>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="/project_version_modules/generate_manual/{{ $project_version->id }}" target="_blank" class="btn btn-outline-info btn-rounded col-md-12">Print Manual</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="/project_version_modules/set_manual_print_order/{{ $project_version->id }}" class="btn btn-outline-info btn-rounded col-md-12">Set Modules Print Order</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -123,24 +130,5 @@
 @endsection
 
 @push('js')
-    <script>
-        let last_guide_id = 1;
-        let id = <?php echo $project_version->id; ?>;
-
-        $('#view_more_guides').click(function () {
-            $.ajax({
-                method: 'POST',
-                url: '/project_versions/view_more_guides',
-                data: {'id': id, 'last_guide_id': last_guide_id},
-                success: function(response){
-                    let responseArray = JSON.parse(response);
-
-                    last_guide_id = responseArray["last_guide_id"];
-                    $("#guides_container").append(responseArray["html"]);
-
-                    window.location.href = '#view_more_guides';
-                }
-            });
-        });
-    </script>
+    <script></script>
 @endpush

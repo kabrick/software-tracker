@@ -15,7 +15,7 @@ class ProjectVersionModuleController extends Controller {
     public function view($project_version_id) {
         $project_version = ProjectVersion::find($project_version_id);
 
-        $modules = ProjectVersionModule::where('parent_module_id', 0)->get();
+        $modules = ProjectVersionModule::where('parent_module_id', 0)->orderBy('print_order')->get();
 
         return view('project_version_modules.view', compact('project_version', 'modules'));
     }
@@ -86,7 +86,7 @@ class ProjectVersionModuleController extends Controller {
                     $html .= '<div class="col-md-4">';
                     $html .= '<a class="btn-icon-clipboard" title="' . $feature->title . '" href="/project_version_features/feature_details/' . $feature->id . '">';
                     $html .= '<div><i class="ni ni-folder-17"></i><div style="margin-left: 10px"><h3>' . $feature->title . '</h3>';
-                    $html .= '<p>Last updated By ' . $feature->name . Carbon::parse($feature->updated_at)->fromNow() . '</p>';
+                    $html .= '<p>Last updated By ' . $feature->name . ' ' . Carbon::parse($feature->updated_at)->fromNow() . '</p>';
                     $html .= '</div></div></a></div>';
                 }
                 $html .= '</div>';
@@ -128,6 +128,7 @@ class ProjectVersionModuleController extends Controller {
             ->where('version_id', $version_id)
             ->where('parent_module_id', 0)
             ->whereNull('deleted_at')
+            ->orderBy('print_order')
             ->get(['id', 'title', 'description']);
 
         $top_level = 1;
@@ -163,6 +164,7 @@ class ProjectVersionModuleController extends Controller {
         $modules = DB::table('project_version_modules')
             ->where('parent_module_id', $module_id)
             ->whereNull('deleted_at')
+            ->orderBy('print_order')
             ->get(['id', 'title', 'description']);
 
         $sub_level = 1;
@@ -187,6 +189,7 @@ class ProjectVersionModuleController extends Controller {
             ->where('is_published', 1)
             ->where('module_id', $module_id)
             ->whereNull('deleted_at')
+            ->orderBy('print_order')
             ->get(['id', 'title', 'description']);
 
         $return_html = "";
@@ -225,5 +228,121 @@ class ProjectVersionModuleController extends Controller {
             ->setOption('footer-html', '<i>' . $title . '</i>');
 
         return $pdf->inline($title . '.pdf');
+    }
+
+    public function set_manual_print_order($version_id) {
+        $project_version = ProjectVersion::find($version_id);
+
+        $modules = ProjectVersionModule::where('parent_module_id', 0)->orderBy('print_order')->get();
+
+        return view('project_version_modules.set_manual_print_order', compact('project_version', 'modules'));
+    }
+
+    public function fetch_module_details_lists($module_id) {
+        $html = "";
+
+        $module = ProjectVersionModule::find($module_id);
+
+        if ($module) {
+            $child_modules = ProjectVersionModule::where('parent_module_id', $module_id)->orderBy('print_order')->get();
+
+            if (count($child_modules) > 0) {
+                $html .= "<div id='list'>";
+                foreach ($child_modules as $child_module) {
+                    $html .= '<div class="draggable"><input name="module_id[]" value="' . $child_module->id . '" type="hidden">' . $child_module->title . '</div>';
+                }
+                $html .= "</div>";
+            } else {
+                $html .= "<div class='text-center'><code>No modules available</code></div>";
+            }
+
+            $response = [
+                "title" => $module->title,
+                "description" => $module->description,
+                "parent_module_id" => $module->parent_module_id,
+                "html" => $html
+            ];
+        } else {
+            $response = [
+                "title" => 'None',
+                "description" => '',
+                "parent_module_id" => 0,
+                "html" => $html
+            ];
+        }
+
+        return json_encode($response);
+    }
+
+    public function save_manual_print_order(Request $request) {
+        $module_ids = is_array($request->module_id) ? $request->module_id : [];
+        $order = 1;
+
+        foreach ($module_ids as $id) {
+            $module = ProjectVersionModule::find($id);
+            $module->print_order = $order;
+            $module->save();
+            $order++;
+        }
+
+        flash("Module print order has been saved")->success();
+        return redirect('/project_version_modules/set_manual_print_order/' . $request->version_id);
+    }
+
+    public function set_manual_print_order_features($version_id) {
+        $project_version = ProjectVersion::find($version_id);
+
+        $modules = ProjectVersionModule::where('parent_module_id', 0)->orderBy('print_order')->get();
+
+        return view('project_version_modules.set_manual_print_order_features', compact('project_version', 'modules'));
+    }
+
+    public function fetch_module_details_lists_features($module_id) {
+        $html = "";
+
+        $module = ProjectVersionModule::find($module_id);
+
+        if ($module) {
+            $features = ProjectVersionFeature::where('module_id', $module_id)->orderBy('print_order')->get();
+
+            if (count($features) > 0) {
+                $html .= "<div id='list'>";
+                foreach ($features as $feature) {
+                    $html .= '<div class="draggable"><input name="feature_id[]" value="' . $feature->id . '" type="hidden">' . $feature->title . '</div>';
+                }
+                $html .= "</div>";
+            }
+
+            $response = [
+                "title" => $module->title,
+                "description" => $module->description,
+                "parent_module_id" => $module->parent_module_id,
+                "html" => $html
+            ];
+        } else {
+            $response = [
+                "title" => 'None',
+                "description" => '',
+                "parent_module_id" => 0,
+                "html" => $html
+            ];
+        }
+
+        return json_encode($response);
+    }
+
+    public function save_manual_print_order_features(Request $request) {
+        $module_ids = is_array($request->feature_id) ? $request->feature_id : [];
+        $order = 1;
+
+        foreach ($module_ids as $id) {
+            $module = ProjectVersionFeature::find($id);
+            $module->print_order = $order;
+            $module->save();
+            $order++;
+        }
+
+        flash("Module print order has been saved")->success();
+        return redirect('/project_version_modules/set_manual_print_order_features/' . $request->version_id);
     }
 }

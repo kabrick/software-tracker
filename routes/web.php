@@ -83,8 +83,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_version_modules/edit', ['uses' => 'ProjectVersionModuleController@edit']);
     Route::any('project_version_modules/fetch_modules/{parent_module_id}', ['uses' => 'ProjectVersionModuleController@fetch_modules']);
     Route::any('project_version_modules/fetch_module_details/{module_id}', ['uses' => 'ProjectVersionModuleController@fetch_module_details']);
+    Route::any('project_version_modules/fetch_module_details_lists/{module_id}', ['uses' => 'ProjectVersionModuleController@fetch_module_details_lists']);
+    Route::any('project_version_modules/fetch_module_details_lists_features/{module_id}', ['uses' => 'ProjectVersionModuleController@fetch_module_details_lists_features']);
     Route::any('project_version_modules/archive/{module_id}', ['uses' => 'ProjectVersionModuleController@archive']);
     Route::any('project_version_modules/generate_manual/{version_id}', ['uses' => 'ProjectVersionModuleController@generate_manual']);
     Route::any('project_version_modules/print_module/{module_id}', ['uses' => 'ProjectVersionModuleController@print_module']);
+    Route::any('project_version_modules/set_manual_print_order/{version_id}', ['uses' => 'ProjectVersionModuleController@set_manual_print_order']);
+    Route::any('project_version_modules/save_manual_print_order', ['as' => 'project_version_modules.save_manual_print_order', 'uses' => 'ProjectVersionModuleController@save_manual_print_order']);
+    Route::any('project_version_modules/set_manual_print_order_features/{version_id}', ['uses' => 'ProjectVersionModuleController@set_manual_print_order_features']);
+    Route::any('project_version_modules/save_manual_print_order_features', ['as' => 'project_version_modules.save_manual_print_order_features', 'uses' => 'ProjectVersionModuleController@save_manual_print_order_features']);
 });
 

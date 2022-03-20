@@ -177,12 +177,12 @@
                 url: '/project_version_modules/fetch_module_details/' + module_id,
                 success: function(response){
                     let decoded_json = JSON.parse(response);
-                    $('#module_details_div').html(decoded_json.html);
-                    $('#module_div_title').text(decoded_json.title + " - Module Features");
-                    $('#parent_module_text').val(decoded_json.title);
-                    $('#current_module_title').val(decoded_json.title);
-                    $('#current_module_desc').val(decoded_json.description);
-                    $('#current_module_parent_id').val(decoded_json.parent_module_id);
+                    $('#module_details_div').html(decoded_json["html"]);
+                    $('#module_div_title').text(decoded_json["title"] + " - Module Features");
+                    $('#parent_module_text').val(decoded_json["title"]);
+                    $('#current_module_title').val(decoded_json["title"]);
+                    $('#current_module_desc').val(decoded_json["description"]);
+                    $('#current_module_parent_id').val(decoded_json["parent_module_id"]);
 
                     update_modules_list();
                 }
