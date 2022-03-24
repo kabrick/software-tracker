@@ -51,10 +51,10 @@ class ProjectVersionModuleController extends Controller {
         }
     }
 
-    public function fetch_modules($parent_module_id) {
+    public function fetch_modules($parent_module_id, $version_id) {
         $html = "";
 
-        $modules = ProjectVersionModule::where('parent_module_id', $parent_module_id)->get();
+        $modules = ProjectVersionModule::where('parent_module_id', $parent_module_id)->where('version_id', $version_id)->get();
 
         if (count($modules) > 0) {
             foreach ($modules as $module) {
@@ -76,6 +76,7 @@ class ProjectVersionModuleController extends Controller {
             $html .= "<h4>Description</h4><p>" . $module->description . "</p>";
 
             $chunked_features = ProjectVersionFeature::where('module_id', $module_id)
+                ->where('version_id', $module->version_id)
                 ->leftJoin('users', 'users.id', '=', 'project_version_features.updated_by')
                 ->orderBy('project_version_features.updated_at', 'desc')
                 ->get(['project_version_features.id', 'project_version_features.title', 'project_version_features.is_published',
@@ -246,7 +247,7 @@ class ProjectVersionModuleController extends Controller {
     public function set_manual_print_order($version_id) {
         $project_version = ProjectVersion::find($version_id);
 
-        $modules = ProjectVersionModule::where('parent_module_id', 0)->orderBy('print_order')->get();
+        $modules = ProjectVersionModule::where('parent_module_id', 0)->where('version_id', $version_id)->orderBy('print_order')->get();
 
         return view('project_version_modules.set_manual_print_order', compact('project_version', 'modules'));
     }
@@ -305,7 +306,7 @@ class ProjectVersionModuleController extends Controller {
     public function set_manual_print_order_features($version_id) {
         $project_version = ProjectVersion::find($version_id);
 
-        $modules = ProjectVersionModule::where('parent_module_id', 0)->orderBy('print_order')->get();
+        $modules = ProjectVersionModule::where('parent_module_id', 0)->where('version_id', $version_id)->orderBy('print_order')->get();
 
         return view('project_version_modules.set_manual_print_order_features', compact('project_version', 'modules'));
     }

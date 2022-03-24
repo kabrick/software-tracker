@@ -230,10 +230,11 @@
 
         function update_modules_list() {
             let parent_module_id = $('#parent_module_id').val();
+            let version_id = $('#version_id').val();
 
             $.ajax({
                 method: 'GET',
-                url: '/project_version_modules/fetch_modules/' + parent_module_id,
+                url: '/project_version_modules/fetch_modules/' + parent_module_id + '/' + version_id,
                 success: function(response){
                     $('#modules_div').html(response);
                 }
