@@ -54,7 +54,7 @@ class ProjectVersionModuleController extends Controller {
     public function fetch_modules($parent_module_id, $version_id) {
         $html = "";
 
-        $modules = ProjectVersionModule::where('parent_module_id', $parent_module_id)->where('version_id', $version_id)->get();
+        $modules = ProjectVersionModule::where('parent_module_id', $parent_module_id)->where('version_id', $version_id)->orderBy('print_order')->get();
 
         if (count($modules) > 0) {
             foreach ($modules as $module) {
