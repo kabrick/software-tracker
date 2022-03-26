@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class ProjectVersionGuideController extends Controller {
 
     public function create_guide($module_id) {
-        $version_id = get_name($module_id, 'id', 'version_id', 'project_version_features');
+        $version_id = get_name($module_id, 'id', 'version_id', 'project_version_modules');
 
         return view('project_version_guides.create_guide', compact('module_id', 'version_id'));
     }
