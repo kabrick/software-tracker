@@ -177,6 +177,7 @@ return [
         LaravelFrontendPresets\ArgonPreset\ArgonPresetServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
 
     ],
 

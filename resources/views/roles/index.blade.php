@@ -6,15 +6,15 @@
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Users</li>
+                    <li class="breadcrumb-item active" aria-current="page">Roles</li>
                 </ol>
             </nav>
 
-            @include('users.menu')
+            @include('roles.menu')
 
             <div class="card">
                 <div class="card-header bg-transparent">
-                    <h3 class="mb-0">View Users</h3>
+                    <h3 class="mb-0">View Roles</h3>
                 </div>
                 <div class="card-body">
                     @include('flash::message')
@@ -25,34 +25,27 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                {{--<th>Phone</th>--}}
-                                <th>Email</th>
-                                <th>Roles</th>
+                                <th>Users</th>
+                                <th>Permissions</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($users as $user)
+                            @foreach ($roles as $key => $role)
                                 <tr>
                                     <td>{{ ++$i }}</td>
-                                    <td>{{ $user->name }}</td>
-                                    {{--<td>
-                                        {{ $user->phone_number }}
-                                    </td>--}}
+                                    <td>{{ $role->name }}</td>
                                     <td>
-                                        {{ $user->email }}
+                                        {{ $role->users_count }}
                                     </td>
                                     <td>
-                                        <ul>
-                                            @foreach($user->getRoleNames() as $role_name)
-                                                <li>{{ $role_name }}</li>
-                                            @endforeach
-                                        </ul>
+                                        {{ $role->permissions_count }}
                                     </td>
                                     <td>
-                                        @can('users_edit')<a class="btn btn-sm btn-warning btn-rounded" href="{{ route('user.edit',$user->id) }}"><i class="fa fa-pencil"></i> Edit</a>@endcan
-                                        @can('users_delete')
-                                            {!! Form::open(['method' => 'DELETE','route' => ['user.destroy', $user->id],'style'=>'display:inline']) !!}
+                                        @can('role_list')<a class="btn btn-sm btn-rounded btn-info" href="{{ route('roles.show',$role->id) }}"><i class="fa fa-info-circle"></i> Details</a>@endcan
+                                        @can('role_edit')<a class="btn btn-sm btn-warning btn-rounded" href="{{ route('roles.edit',$role->id) }}"><i class="fa fa-pencil"></i> Edit</a>@endcan
+                                        @can('role_delete')
+                                            {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}
                                             {!! Form::submit('Delete', ['class' => 'btn btn-sm btn-rounded btn-danger']) !!}
                                             {!! Form::close() !!}
                                         @endcan

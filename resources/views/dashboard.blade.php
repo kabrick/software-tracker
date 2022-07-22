@@ -19,28 +19,32 @@
                     @include('flash::message')
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <a class="btn-icon-clipboard" title="Create New Project" href="{{ route('projects.create') }}">
-                                <div>
-                                    <i class="ni ni-fat-add"></i>
-                                    <span>
+                        @can('projects_create')
+                            <div class="col-md-6">
+                                <a class="btn-icon-clipboard" title="Create New Project" href="{{ route('projects.create') }}">
+                                    <div>
+                                        <i class="ni ni-fat-add"></i>
+                                        <span>
                                         <h3>Create New Project</h3>
                                         <p>Create a new project and easily document your software</p>
                                     </span>
-                                </div>
-                            </a>
-                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endcan
                         <div class="col-md-6">
                             @if(count($projects) > 0)
-                                <a class="btn-icon-clipboard" title="{{ $projects[0]->name }}" href="/projects/{{ $projects[0]->id }}">
-                                    <div>
-                                        <i class="ni ni-folder-17"></i>
-                                        <span>
+                                @can('projects_list')
+                                    <a class="btn-icon-clipboard" title="{{ $projects[0]->name }}" href="/projects/{{ $projects[0]->id }}">
+                                        <div>
+                                            <i class="ni ni-folder-17"></i>
+                                            <span>
                                         <h3>{{ $projects[0]->name }}</h3>
                                         <p>{{ $projects[0]->description }}</p>
                                     </span>
-                                    </div>
-                                </a>
+                                        </div>
+                                    </a>
+                                @endcan
                             @endif
                         </div>
                     </div>
@@ -51,28 +55,32 @@
                         <div class="row">
                             <div class="col-md-6">
                                 @if(isset($projects[$counter]))
-                                    <a class="btn-icon-clipboard" title="{{ $projects[$counter]->name }}" href="/projects/{{ $projects[$counter]->id }}">
-                                        <div>
-                                            <i class="ni ni-folder-17"></i>
-                                            <span>
-                                        <h3>{{ $projects[$counter]->name }}</h3>
-                                        <p>{{ $projects[$counter]->description }}</p>
-                                    </span>
-                                        </div>
-                                    </a>
+                                    @can('projects_list')
+                                        <a class="btn-icon-clipboard" title="{{ $projects[$counter]->name }}" href="/projects/{{ $projects[$counter]->id }}">
+                                            <div>
+                                                <i class="ni ni-folder-17"></i>
+                                                <span>
+                                                    <h3>{{ $projects[$counter]->name }}</h3>
+                                                    <p>{{ $projects[$counter]->description }}</p>
+                                                </span>
+                                            </div>
+                                        </a>
+                                    @endcan
                                 @endif
                             </div>
                             <div class="col-md-6">
                                 @if(isset($projects[$counter + 1]))
-                                    <a class="btn-icon-clipboard" title="{{ $projects[$counter + 1]->name }}" href="/projects/{{ $projects[$counter + 1]->id }}">
-                                        <div>
-                                            <i class="ni ni-folder-17"></i>
-                                            <span>
-                                        <h3>{{ $projects[$counter + 1]->name }}</h3>
-                                        <p>{{ $projects[$counter + 1]->description }}</p>
-                                    </span>
-                                        </div>
-                                    </a>
+                                    @can('projects_list')
+                                        <a class="btn-icon-clipboard" title="{{ $projects[$counter + 1]->name }}" href="/projects/{{ $projects[$counter + 1]->id }}">
+                                            <div>
+                                                <i class="ni ni-folder-17"></i>
+                                                <span>
+                                                    <h3>{{ $projects[$counter + 1]->name }}</h3>
+                                                    <p>{{ $projects[$counter + 1]->description }}</p>
+                                                </span>
+                                            </div>
+                                        </a>
+                                    @endcan
                                 @endif
                             </div>
                         </div>
@@ -82,7 +90,11 @@
 
                     <br><br>
 
-                    <a href="{{ route('projects.view_archived_projects') }}" class="btn btn-default btn-rounded btn-sm text-white">View Archived Projects</a>
+                    @can('view_archived_projects') <a href="{{ route('projects.view_archived_projects') }}" class="btn btn-default btn-rounded btn-sm text-white">View Archived Projects</a>@endcan
+
+                    @can('role_list') <a href="{{ route('roles.index') }}" class="btn btn-primary btn-rounded btn-sm text-white">Manage Roles</a>@endcan
+
+                    @can('users_list') <a href="{{ route('user.index') }}" class="btn btn-primary btn-rounded btn-sm text-white">Manage Users</a>@endcan
 
                 </div>
             </div>

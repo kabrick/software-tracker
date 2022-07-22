@@ -22,7 +22,8 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::resource('user', 'UserController', ['except' => ['show']]);
+    Route::resource('user', 'UserController');
+
     Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
     Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
     Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
@@ -86,5 +87,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::any('project_version_modules/save_manual_print_order', ['as' => 'project_version_modules.save_manual_print_order', 'uses' => 'ProjectVersionModuleController@save_manual_print_order']);
     Route::any('project_version_modules/set_manual_print_order_features/{version_id}', ['uses' => 'ProjectVersionModuleController@set_manual_print_order_features']);
     Route::any('project_version_modules/save_manual_print_order_features', ['as' => 'project_version_modules.save_manual_print_order_features', 'uses' => 'ProjectVersionModuleController@save_manual_print_order_features']);
+
+    // Roles
+    Route::resource('roles', 'RoleController');
 });
 
