@@ -26,7 +26,7 @@
                                 <div class="col-md-6"><h3>Modules</h3></div>
                                 <div class="col-md-6">
                                     <a href="#" onclick="modules_back_button()" class="btn btn-outline-dark btn-rounded btn-sm">Back</a>
-                                    <a href="#" class="btn btn-outline-success btn-rounded btn-sm" data-toggle="modal" data-target="#module_form">Add Module</a>
+                                    @can('project_modules_create')<a href="#" class="btn btn-outline-success btn-rounded btn-sm" data-toggle="modal" data-target="#module_form">Add Module</a>@endcan
                                 </div>
                             </div>
                         </div>
@@ -49,10 +49,10 @@
                             <div class="row">
                                 <div class="col-md-4"><h3 id="module_div_title">Module Features</h3></div>
                                 <div class="col-md-8">
-                                    <a href="#" class="btn btn-outline-primary btn-rounded" onclick="edit_module()">Edit Module</a>
-                                    <a href="#" class="btn btn-outline-warning btn-rounded" onclick="archive_module()">Archive Module</a>
-                                    <a href="#" class="btn btn-outline-success btn-rounded" onclick="add_feature()">Add Feature To Module</a>
-                                    <a href="#" class="btn btn-outline-info btn-rounded" onclick="print_module()">Print Module</a>
+                                    @can('project_modules_edit')<a href="#" class="btn btn-outline-primary btn-rounded" onclick="edit_module()">Edit Module</a>@endcan
+                                    @can('project_modules_delete')<a href="#" class="btn btn-outline-warning btn-rounded" onclick="archive_module()">Archive Module</a>@endcan
+                                    @can('project_features_create')<a href="#" class="btn btn-outline-success btn-rounded" onclick="add_feature()">Add Feature To Module</a>@endcan
+                                    @can('project_modules_print')<a href="#" class="btn btn-outline-info btn-rounded" onclick="print_module()">Print Module</a>@endcan
                                 </div>
                             </div>
                         </div>

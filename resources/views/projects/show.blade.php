@@ -25,17 +25,21 @@
                             <p>{{ $project->description }}</p>
                         </div>
                         <div class="col-md-4">
-                            <a href="/projects/{{ $project->id }}/edit" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>
+                            @can('projects_edit')<a href="/projects/{{ $project->id }}/edit" class="btn btn-outline-primary btn-rounded col-md-12">Edit</a>@endcan
 
                             <br><br>
 
                             <div class="row">
-                                <div class="col-md-6">
-                                    <a href="/projects/archive_project/{{ $project->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this project')">Archive</a>
-                                </div>
-                                <div class="col-md-6">
-                                    <a href="/projects/delete_project/{{ $project->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this project')">Delete</a>
-                                </div>
+                                @can('projects_delete')
+                                    <div class="col-md-6">
+                                        <a href="/projects/archive_project/{{ $project->id }}/" class="btn btn-outline-warning btn-rounded col-md-12" onclick="return confirm('Are you sure you want to archive this project')">Archive</a>
+                                    </div>
+                                @endcan
+                                @can('projects_delete')
+                                    <div class="col-md-6">
+                                        <a href="/projects/delete_project/{{ $project->id }}/" class="btn btn-outline-danger btn-rounded col-md-12" onclick="return confirm('Are you sure you want to permanently delete this project')">Delete</a>
+                                    </div>
+                                @endcan
                             </div>
                         </div>
                     </div>
@@ -45,6 +49,7 @@
                     <h4>Project Versions</h4>
 
                     <div class="row">
+                        @can('projects_create')
                         <div class="col-md-6">
                             <a class="btn-icon-clipboard" title="Add New Project Version" href="{{ route('project_versions.create') }}">
                                 <div>
@@ -56,6 +61,8 @@
                                 </div>
                             </a>
                         </div>
+                        @endcan
+                        @can('projects_list')
                         <div class="col-md-6">
                             @if(count($project_versions) > 0)
                                 <a class="btn-icon-clipboard" title="{{ $project_versions[0]->name }}" href="/project_versions/{{ $project_versions[0]->id }}">
@@ -69,10 +76,12 @@
                                 </a>
                             @endif
                         </div>
+                        @endcan
                     </div>
 
                     @php $counter = 1; @endphp
 
+                    @can('projects_list')
                     @while($counter < count($project_versions))
                         <div class="row">
                             <div class="col-md-6">
@@ -105,10 +114,11 @@
 
                         @php $counter += 2; @endphp
                     @endwhile
+                    @endcan
 
                     <br><br>
 
-                    <a href="{{ route('projects.view_archived_versions') }}" class="btn btn-default btn-rounded btn-sm text-white">View Archived Project Versions</a>
+                    @can('projects_delete')<a href="{{ route('projects.view_archived_versions') }}" class="btn btn-default btn-rounded btn-sm text-white">View Archived Project Versions</a>@endcan
                 </div>
             </div>
         </div>
