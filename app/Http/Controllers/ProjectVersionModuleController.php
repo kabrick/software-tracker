@@ -159,7 +159,7 @@ class ProjectVersionModuleController extends Controller {
             ->setOption('margin-top', 5)
             ->setOption('footer-html', '<i>' . $title . '</i>');
 
-        return $pdf->inline($title . '.pdf');
+        return $pdf->download($title . '.pdf');
     }
 
     public function get_child_modules($module_id, $current_level): string {
