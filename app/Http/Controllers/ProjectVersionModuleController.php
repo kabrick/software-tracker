@@ -149,7 +149,7 @@ class ProjectVersionModuleController extends Controller {
         $title = get_name(get_name($version_id, 'id', 'project_id', 'project_versions'), 'id', 'name', 'projects');
 
         $data = [
-            'html' => $html,
+            'html' => preg_replace('/<iframe.*?\/iframe>/i','', $html),
             'title' => $title
         ];
 
@@ -231,7 +231,7 @@ class ProjectVersionModuleController extends Controller {
         $title = $module->title;
 
         $data = [
-            'html' => $html,
+            'html' => preg_replace('/<iframe.*?\/iframe>/i','', $html),
             'title' => $title
         ];
 
